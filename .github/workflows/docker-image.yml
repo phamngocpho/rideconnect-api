@@ -40,3 +40,20 @@ jobs:
         tags: |
           ${{ env.DOCKER_IMAGE }}:latest
           ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+          
+    - name: Deploy to Render
+      if: github.ref == 'refs/heads/main'
+      env:
+        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+      run: |
+        # Update image tag trong Render service
+        curl -X PATCH "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}" \
+        -H "accept: application/json" \
+        -H "authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+        -H "content-type: application/json" \
+        -d "{\"imageTag\": \"${{ github.sha }}\"}"
+        
+        # Trigger deploy
+        curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+        -H "accept: application/json" \
+        -H "authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
