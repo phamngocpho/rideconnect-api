@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RideConnect - Ứng dụng đặt xe di động</title>
+    <title>RideConnect API - Mobile App Backend</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50">
@@ -11,7 +11,7 @@
     <!-- Header Section -->
     <header class="bg-white shadow">
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-            <h1 class="text-3xl font-bold text-gray-900">RideConnect</h1>
+            <h1 class="text-3xl font-bold text-gray-900">RideConnect API</h1>
             <p class="mt-2 text-sm text-gray-600">Ứng dụng đặt xe di động</p>
         </div>
     </header>
@@ -19,62 +19,14 @@
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <!-- Project Info -->
         <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-            <!-- Thông tin dự án -->
             <div class="px-4 py-5 sm:px-6">
                 <h2 class="text-lg font-medium text-gray-900">Thông tin dự án</h2>
                 <p class="mt-1 text-sm text-gray-500">
-                    RideConnect là ứng dụng đặt xe di động cho phép người dùng đặt xe một cách nhanh chóng và tiện lợi.
-                    Hệ thống bao gồm hai đối tượng chính: khách hàng và tài xế.
+                    Ứng dụng đặt xe di động cho phép người dùng đặt xe một cách nhanh chóng và tiện lợi
                 </p>
             </div>
 
-            <!-- Đối tượng người dùng -->
-            <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Đối tượng người dùng</h3>
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <!-- Khách hàng -->
-                    <div class="rounded-lg bg-gray-50 p-4">
-                        <h4 class="font-semibold text-gray-900">Đối với khách hàng:</h4>
-                        <ul class="mt-2 text-sm text-gray-600 space-y-1">
-                            <li>• Đăng ký và đăng nhập tài khoản</li>
-                            <li>• Tìm kiếm và đặt xe dựa trên vị trí hiện tại</li>
-                            <li>• Chọn loại phương tiện</li>
-                            <li>• Xem thông tin tài xế và theo dõi vị trí xe</li>
-                            <li>• Thanh toán qua nhiều phương thức</li>
-                            <li>• Đánh giá tài xế sau chuyến đi</li>
-                            <li>• Xem lịch sử chuyến đi</li>
-                        </ul>
-                    </div>
-
-                    <!-- Tài xế -->
-                    <div class="rounded-lg bg-gray-50 p-4">
-                        <h4 class="font-semibold text-gray-900">Đối với tài xế:</h4>
-                        <ul class="mt-2 text-sm text-gray-600 space-y-1">
-                            <li>• Đăng ký và đăng nhập tài khoản tài xế</li>
-                            <li>• Nhận thông báo về yêu cầu đặt xe</li>
-                            <li>• Chấp nhận hoặc từ chối chuyến đi</li>
-                            <li>• Xem thông tin chuyến đi và khách hàng</li>
-                            <li>• Nhận thanh toán và xem lịch sử thu nhập</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Goong Map Integration -->
-            <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Tích hợp Goong Map</h3>
-                <div class="rounded-lg bg-gray-50 p-4">
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        <li>• Hiển thị bản đồ với giao diện thân thiện</li>
-                        <li>• Định vị vị trí hiện tại</li>
-                        <li>• Tính toán quãng đường và giá tiền</li>
-                        <li>• Hiển thị lộ trình tối ưu</li>
-                        <li>• Tìm kiếm và tự động hoàn thành địa chỉ</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Công nghệ -->
+            <!-- Tech Stack -->
             <div class="px-4 py-5 sm:p-6">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Công nghệ sử dụng</h3>
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -96,10 +48,51 @@
                 </div>
             </div>
 
-            <div id="database-section">
-                <!-- Database tables will be inserted here by JavaScript -->
-            </div>
+            <!-- Team Members -->
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Thành viên nhóm</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                    <!-- Member 1 -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="font-semibold text-gray-900">Phạm Ngọc Phổ</div>
+                        <div class="text-sm text-gray-600 mt-1">23IT212</div>
+                        <div class="text-sm text-blue-600 mt-2">Frontend Developer</div>
+                        <div class="text-xs text-gray-500 mt-2">
+                            Hiển thị bản đồ, định vị vị trí, tìm kiếm địa điểm, đặt xe và tính giá
+                        </div>
+                    </div>
 
+                    <!-- Member 2 -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="font-semibold text-gray-900">Nguyễn Văn Sanh</div>
+                        <div class="text-sm text-gray-600 mt-1">23IT232</div>
+                        <div class="text-sm text-blue-600 mt-2">Frontend Developer</div>
+                        <div class="text-xs text-gray-500 mt-2">
+                            Đăng ký và đăng nhập, quản lý thông tin cá nhân
+                        </div>
+                    </div>
+
+                    <!-- Member 3 -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="font-semibold text-gray-900">Bùi Đặng Quang Vinh</div>
+                        <div class="text-sm text-gray-600 mt-1">23IT312</div>
+                        <div class="text-sm text-blue-600 mt-2">Backend Developer</div>
+                        <div class="text-xs text-gray-500 mt-2">
+                            Xây dựng CSDL, phát triển API, tích hợp Goong Map
+                        </div>
+                    </div>
+
+                    <!-- Member 4 -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="font-semibold text-gray-900">Huỳnh Xuân Hậu</div>
+                        <div class="text-sm text-gray-600 mt-1">23AI014</div>
+                        <div class="text-sm text-blue-600 mt-2">Frontend Developer</div>
+                        <div class="text-xs text-gray-500 mt-2">
+                            Thanh toán, lịch sử chuyến đi, đánh giá
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -112,155 +105,5 @@
         </div>
     </footer>
 </div>
-
-<script>
-    // Database schema data
-    const databaseSchema = {
-        users: {
-            title: "Bảng users",
-            fields: [
-                { field: "user_id", type: "uuid", description: "Khóa chính, định danh duy nhất của người dùng" },
-                { field: "phone_number", type: "varchar(15)", description: "Số điện thoại, duy nhất trong hệ thống" },
-                { field: "email", type: "varchar(255)", description: "Email người dùng, duy nhất trong hệ thống" },
-                { field: "password_hash", type: "varchar(255)", description: "Mật khẩu đã được mã hóa" },
-                { field: "full_name", type: "varchar(100)", description: "Họ và tên người dùng" },
-                { field: "avatar_url", type: "text", description: "Đường dẫn đến ảnh đại diện" },
-                { field: "created_at", type: "timestamp", description: "Thời điểm tạo tài khoản" },
-                { field: "updated_at", type: "timestamp", description: "Thời điểm cập nhật thông tin gần nhất" },
-                { field: "status", type: "varchar(20)", description: "Trạng thái tài khoản (mặc định: 'active')" }
-            ]
-        },
-        customers: {
-            title: "Bảng customers",
-            fields: [
-                { field: "customer_id", type: "uuid", description: "Khóa chính, liên kết với user_id trong bảng users" },
-                { field: "default_payment_method", type: "varchar(50)", description: "Phương thức thanh toán mặc định" },
-                { field: "rating", type: "numeric(3,2)", description: "Điểm đánh giá của khách hàng (mặc định: 5.0)" },
-                { field: "total_trips", type: "integer", description: "Tổng số chuyến đi đã thực hiện" },
-                { field: "version", type: "bigint", description: "Phiên bản dữ liệu, dùng cho quản lý đồng thời" }
-            ]
-        },
-        drivers: {
-            title: "Bảng drivers",
-            fields: [
-                { field: "driver_id", type: "uuid", description: "Khóa chính, liên kết với user_id trong bảng users" },
-                { field: "license_number", type: "varchar(50)", description: "Số giấy phép lái xe, duy nhất" },
-                { field: "vehicle_type", type: "varchar(20)", description: "Loại phương tiện (xe máy, ô tô 4 chỗ, ô tô 7 chỗ)" },
-                { field: "vehicle_plate", type: "varchar(20)", description: "Biển số xe, duy nhất" },
-                { field: "rating", type: "numeric(3,2)", description: "Điểm đánh giá của tài xế (mặc định: 5.0)" },
-                { field: "total_trips", type: "integer", description: "Tổng số chuyến đi đã thực hiện" },
-                { field: "current_status", type: "varchar(20)", description: "Trạng thái hiện tại (mặc định: 'offline')" },
-                { field: "documents_verified", type: "boolean", description: "Trạng thái xác minh giấy tờ" }
-            ]
-        },
-        trips: {
-            title: "Bảng trips",
-            fields: [
-                { field: "trip_id", type: "uuid", description: "Khóa chính, định danh duy nhất của chuyến đi" },
-                { field: "customer_id", type: "uuid", description: "Liên kết với customer_id trong bảng customers" },
-                { field: "driver_id", type: "uuid", description: "Liên kết với driver_id trong bảng drivers" },
-                { field: "pickup_location", type: "geography", description: "Vị trí đón khách" },
-                { field: "dropoff_location", type: "geography", description: "Vị trí trả khách" },
-                { field: "status", type: "varchar(20)", description: "Trạng thái chuyến đi" },
-                { field: "created_at", type: "timestamp", description: "Thời điểm tạo chuyến đi" },
-                { field: "completed_at", type: "timestamp", description: "Thời điểm hoàn thành chuyến đi" }
-            ]
-        },
-        payments: {
-            title: "Bảng payments",
-            fields: [
-                { field: "payment_id", type: "uuid", description: "Khóa chính, định danh duy nhất của giao dịch" },
-                { field: "trip_id", type: "uuid", description: "Liên kết với trip_id trong bảng trips" },
-                { field: "amount", type: "decimal(10,2)", description: "Số tiền thanh toán" },
-                { field: "payment_method", type: "varchar(50)", description: "Phương thức thanh toán" },
-                { field: "status", type: "varchar(20)", description: "Trạng thái thanh toán" },
-                { field: "created_at", type: "timestamp", description: "Thời điểm tạo giao dịch" }
-            ]
-        }
-    };
-
-    // Database relationships
-    const relationships = [
-        { from: "user", to: "customer", type: "1-1", description: "một người dùng có thể là một khách hàng" },
-        { from: "user", to: "driver", type: "1-1", description: "một người dùng có thể là một tài xế" },
-        { from: "driver", to: "driver_locations", type: "1-1", description: "một tài xế có một vị trí hiện tại" },
-        { from: "customer", to: "trips", type: "1-n", description: "một khách hàng có thể có nhiều chuyến đi" },
-        { from: "driver", to: "trips", type: "1-n", description: "một tài xế có thể có nhiều chuyến đi" },
-        { from: "trip", to: "payment", type: "1-1", description: "một chuyến đi có một giao dịch thanh toán" }
-    ];
-
-    // Function to create table HTML
-    function createTableHTML(tableData) {
-        return `
-            <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-3">${tableData.title}</h3>
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Trường</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kiểu dữ liệu</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mô tả</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            ${tableData.fields.map(field => `
-                                <tr>
-                                    <td class="px-6 py-4 text-sm text-gray-900">${field.field}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">${field.type}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-900">${field.description}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        `;
-    }
-
-    // Function to create relationships HTML
-    function createRelationshipsHTML() {
-        return `
-            <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Sơ đồ quan hệ giữa các bảng</h3>
-                <div class="rounded-lg bg-gray-50 p-4">
-                    <ul class="text-sm text-gray-600 space-y-1">
-                        ${relationships.map(rel =>
-            `<li>• ${rel.from} – ${rel.to}: Quan hệ ${rel.type}, ${rel.description}</li>`
-        ).join('')}
-                    </ul>
-                </div>
-            </div>
-        `;
-    }
-
-    // Insert database content when page loads
-    document.addEventListener('DOMContentLoaded', () => {
-        const databaseSection = document.getElementById('database-section');
-        if (databaseSection) {
-            // Add database overview
-            databaseSection.innerHTML = `
-                <div class="px-4 py-5 sm:p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Cơ sở dữ liệu chi tiết</h3>
-                    <div class="rounded-lg bg-gray-50 p-4 mb-6">
-                        <p class="text-sm text-gray-600">
-                            Hệ thống RideConnect sử dụng PostgreSQL làm cơ sở dữ liệu chính để lưu trữ và quản lý thông tin.
-                            Cơ sở dữ liệu được thiết kế với các bảng chính để lưu trữ thông tin về người dùng, chuyến đi,
-                            thanh toán và các dữ liệu vị trí địa lý.
-                        </p>
-                    </div>
-                </div>
-            `;
-
-            // Add tables
-            Object.values(databaseSchema).forEach(table => {
-                databaseSection.innerHTML += createTableHTML(table);
-            });
-
-            // Add relationships
-            databaseSection.innerHTML += createRelationshipsHTML();
-        }
-    });
-</script>
 </body>
 </html>
