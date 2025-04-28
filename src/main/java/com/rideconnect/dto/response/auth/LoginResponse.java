@@ -20,4 +20,5 @@ public class LoginResponse {
     private String phoneNumber;
     private String email;
     private String avatarUrl;
+    private String userType;
 }

@@ -9,6 +9,7 @@ import com.rideconnect.entity.User;
 import com.rideconnect.exception.BadRequestException;
 import com.rideconnect.exception.UnauthorizedException;
 import com.rideconnect.repository.CustomerRepository;
+import com.rideconnect.repository.DriverRepository;
 import com.rideconnect.repository.UserRepository;
 import com.rideconnect.security.JwtTokenProvider;
 import com.rideconnect.service.AuthService;
@@ -21,20 +22,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
+    private final DriverRepository driverRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     @Transactional
-    public RegisterResponse register(RegisterRequest request) {  // Đổi từ registerUser sang register
-        // Check if phone number already exists
+    public RegisterResponse register(RegisterRequest request) {
+        // Check if a phone number already exists
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new BadRequestException("Phone number already registered");
         }
@@ -45,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("Email already registered");
         }
 
-        // Create user entity
+        // Create a user entity
         User user = User.builder()
                 .phoneNumber(request.getPhoneNumber())
                 .email(request.getEmail())
@@ -56,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
         // Save user
         User savedUser = userRepository.save(user);
 
-        // Create customer entity
+        // Create a customer entity
         Customer customer = Customer.builder()
                 .customerId(savedUser.getUserId())
                 .user(savedUser)
@@ -86,12 +90,15 @@ public class AuthServiceImpl implements AuthService {
                     )
             );
 
-            // Set authentication to security context
+            // Set authentication to a security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Get user from repository
+            // Get user from a repository
             User user = userRepository.findByPhoneNumber(request.getPhoneNumber())
                     .orElseThrow(() -> new UnauthorizedException("Invalid phone number or password"));
+
+            // Xác định userType
+            String userType = determineUserType(user.getUserId());
 
             // Generate token
             String token = jwtTokenProvider.generateToken(user.getUserId().toString());
@@ -103,11 +110,25 @@ public class AuthServiceImpl implements AuthService {
                     .fullName(user.getFullName())
                     .phoneNumber(user.getPhoneNumber())
                     .email(user.getEmail())
+                    .avatarUrl(user.getAvatarUrl())
+                    .userType(userType)  // Thêm userType vào response
                     .build();
         } catch (Exception e) {
             throw new UnauthorizedException("Invalid phone number or password");
         }
     }
+
+    // Phương thức này để xác định userType
+    private String determineUserType(UUID userId) {
+        if (driverRepository.existsById(userId)) {
+            return "DRIVER";
+        }
+
+        customerRepository.existsById(userId);
+
+        return "CUSTOMER";
+    }
+
 
     @Override
     public void logout(String token) {
