@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
         Trip trip = tripRepository.findById(request.getTripId())
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", request.getTripId().toString()));
 
-        // Check if user is either customer or driver of this trip
+        // Check if the user is either customer or driver of this trip
         UUID userUuid = UUID.fromString(userId);
         boolean isDriver = trip.getDriver().getDriverId().equals(userUuid);
         boolean isCustomer = trip.getCustomer().getCustomerId().equals(userUuid);
@@ -45,7 +45,7 @@ public class MessageServiceImpl implements MessageService {
             throw new BadRequestException("You are not authorized to send messages for this trip");
         }
 
-        // Check if recipient is the other party of the trip
+        // Check if the recipient is the other party of the trip
         UUID recipientUuid = request.getRecipientId();
         if ((isDriver && !trip.getCustomer().getCustomerId().equals(recipientUuid)) ||
                 (isCustomer && !trip.getDriver().getDriverId().equals(recipientUuid))) {
@@ -59,7 +59,7 @@ public class MessageServiceImpl implements MessageService {
         User recipient = userRepository.findById(recipientUuid)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", recipientUuid.toString()));
 
-        // Create message
+        // Create a message
         Message message = Message.builder()
                 .trip(trip)
                 .sender(sender)
@@ -73,7 +73,7 @@ public class MessageServiceImpl implements MessageService {
         // Convert to response
         MessageResponse response = mapMessageToMessageResponse(savedMessage);
 
-        // Send message via WebSocket
+        // Send messages via WebSocket
         if (isDriver) {
             webSocketHandler.sendLocationUpdateToCustomer(trip.getCustomer().getCustomerId().toString(), response);
         } else {
@@ -89,7 +89,7 @@ public class MessageServiceImpl implements MessageService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
-        // Check if user is either customer or driver of this trip
+        // Check if the user is either customer or driver of this trip
         UUID userUuid = UUID.fromString(userId);
         if (!trip.getCustomer().getCustomerId().equals(userUuid) &&
                 !trip.getDriver().getDriverId().equals(userUuid)) {
@@ -99,7 +99,7 @@ public class MessageServiceImpl implements MessageService {
         // Get all messages for this trip
         List<Message> messages = messageRepository.findByTripTripIdOrderByCreatedAt(tripId);
 
-        // Mark messages as read if user is the recipient
+        // Mark messages as read if the user is the recipient
         List<Message> unreadMessages = messages.stream()
                 .filter(message -> message.getRecipient().getUserId().equals(userUuid) && !message.getIsRead())
                 .collect(Collectors.toList());
@@ -110,13 +110,13 @@ public class MessageServiceImpl implements MessageService {
         }
 
         // Convert to response
-        List<ConversationResponse.MessageDto> messageDtos = messages.stream()
+        List<ConversationResponse.MessageDto> messageDTOs = messages.stream()
                 .map(this::mapMessageToMessageDto)
                 .collect(Collectors.toList());
 
         return ConversationResponse.builder()
                 .tripId(tripId)
-                .messages(messageDtos)
+                .messages(messageDTOs)
                 .build();
     }
 

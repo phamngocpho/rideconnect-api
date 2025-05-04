@@ -16,7 +16,7 @@ public interface AuthService {
     RegisterResponse register(RegisterRequest request);
 
     /**
-     * Login an existing user
+     * Log in as an existing user
      *
      * @param request login credentials
      * @return login response with user details and token

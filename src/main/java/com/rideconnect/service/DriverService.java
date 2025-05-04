@@ -17,7 +17,7 @@ public interface DriverService {
     DriverProfileResponse registerAsDriver(String userId, RegisterDriverRequest request);
 
     /**
-     * Get driver profile
+     * Get a driver profile
      *
      * @param userId user ID
      * @return driver profile details
@@ -33,7 +33,7 @@ public interface DriverService {
     void updateDriverStatus(String userId, UpdateDriverStatusRequest request);
 
     /**
-     * Get driver dashboard with stats
+     * Get a driver dashboard with stats
      *
      * @param userId user ID
      * @return dashboard data

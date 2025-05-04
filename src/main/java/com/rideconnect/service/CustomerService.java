@@ -4,8 +4,6 @@ import com.rideconnect.dto.request.customer.SaveAddressRequest;
 import com.rideconnect.dto.response.customer.CustomerDashboardResponse;
 import com.rideconnect.dto.response.customer.CustomerProfileResponse;
 
-import java.util.UUID;
-
 public interface CustomerService {
 
     /**
@@ -26,7 +24,7 @@ public interface CustomerService {
     CustomerProfileResponse saveAddress(String userId, SaveAddressRequest request);
 
     /**
-     * Get customer dashboard with stats
+     * Get a customer dashboard with stats
      *
      * @param userId user ID
      * @return dashboard data

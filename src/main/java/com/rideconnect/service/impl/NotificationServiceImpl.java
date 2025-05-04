@@ -25,7 +25,7 @@ public class NotificationServiceImpl implements NotificationService {
     public NotificationsResponse getNotifications(String userId) {
         List<Notification> notifications = notificationRepository.findByUserUserIdOrderByCreatedAtDesc(UUID.fromString(userId));
 
-        List<NotificationsResponse.NotificationDto> notificationDtos = notifications.stream()
+        List<NotificationsResponse.NotificationDto> notificationDTOs = notifications.stream()
                 .map(this::mapNotificationToDto)
                 .collect(Collectors.toList());
 
@@ -34,7 +34,7 @@ public class NotificationServiceImpl implements NotificationService {
                 .count();
 
         return NotificationsResponse.builder()
-                .notifications(notificationDtos)
+                .notifications(notificationDTOs)
                 .unreadCount(unreadCount)
                 .build();
     }

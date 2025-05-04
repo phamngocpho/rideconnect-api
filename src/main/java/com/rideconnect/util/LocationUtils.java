@@ -36,9 +36,9 @@ public class LocationUtils {
                 + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
                 * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = R * c * 1000; // convert to meters
+        // convert to meters
 
-        return distance;
+        return R * c * 1000;
     }
 
     /**

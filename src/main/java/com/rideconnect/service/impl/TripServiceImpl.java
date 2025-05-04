@@ -48,10 +48,10 @@ public class TripServiceImpl implements TripService {
 
         // Create location points
         Point pickupLocation = locationUtils.createPoint(request.getPickupLatitude(), request.getPickupLongitude());
-        Point dropoffLocation = locationUtils.createPoint(request.getDropoffLatitude(), request.getDropoffLongitude());
+        Point dropOffLocation = locationUtils.createPoint(request.getDropoffLatitude(), request.getDropoffLongitude());
 
         // Calculate distance and duration
-        float distanceInKm = (float) (locationUtils.calculateDistance(pickupLocation, dropoffLocation) / 1000);
+        float distanceInKm = (float) (locationUtils.calculateDistance(pickupLocation, dropOffLocation) / 1000);
         int durationInMinutes = (int) (distanceInKm * 2); // Rough estimate: 2 minutes per km
 
         // Calculate estimated fare
@@ -63,7 +63,7 @@ public class TripServiceImpl implements TripService {
             driver = driverRepository.findById(request.getPreferredDriverId())
                     .orElseThrow(() -> new ResourceNotFoundException("Driver", "id", request.getPreferredDriverId().toString()));
         } else {
-            // Find nearest available driver with matching vehicle type
+            // Find the nearest available driver with a matching vehicle type
             List<Object[]> nearbyDrivers = driverLocationRepository.findAvailableDriversWithinRadius(
                     request.getPickupLatitude(),  // latitude
                     request.getPickupLongitude(), // longitude
@@ -75,17 +75,17 @@ public class TripServiceImpl implements TripService {
             }
 
             // Get the nearest driver
-            Object[] nearest = nearbyDrivers.get(0);
+            Object[] nearest = nearbyDrivers.getFirst();
             DriverLocation driverLocation = (DriverLocation) nearest[0];
             driver = driverLocation.getDriver();
         }
 
-        // Create trip
+        // Create a trip
         Trip trip = Trip.builder()
                 .customer(customer)
                 .driver(driver)
                 .pickupLocation(pickupLocation)
-                .dropoffLocation(dropoffLocation)
+                .dropoffLocation(dropOffLocation)
                 .pickupAddress(request.getPickupAddress())
                 .dropoffAddress(request.getDropoffAddress())
                 .status("pending")
@@ -97,7 +97,7 @@ public class TripServiceImpl implements TripService {
 
         Trip savedTrip = tripRepository.save(trip);
 
-        // Create notification for driver
+        // Create notification for drivers
         Notification driverNotification = Notification.builder()
                 .user(driver.getUser())
                 .type("new_trip_request")
@@ -108,7 +108,7 @@ public class TripServiceImpl implements TripService {
                 .build();
         notificationRepository.save(driverNotification);
 
-        // Send trip request to driver via WebSocket
+        // Send trip request to drivers via WebSocket
         webSocketHandler.sendTripRequestToDriver(driver.getDriverId().toString(),
                 TripDetailsResponse.builder()
                         .tripId(savedTrip.getTripId())
@@ -136,7 +136,7 @@ public class TripServiceImpl implements TripService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
-        // Check if user is either customer or driver of this trip
+        // Check if the user is either customer or driver of this trip
         UUID userUuid = UUID.fromString(userId);
         if (!trip.getCustomer().getCustomerId().equals(userUuid) &&
                 !trip.getDriver().getDriverId().equals(userUuid)) {
@@ -152,7 +152,7 @@ public class TripServiceImpl implements TripService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
-        // Check if user is either customer or driver of this trip
+        // Check if the user is either customer or driver of this trip
         UUID userUuid = UUID.fromString(userId);
         boolean isDriver = trip.getDriver().getDriverId().equals(userUuid);
         boolean isCustomer = trip.getCustomer().getCustomerId().equals(userUuid);
@@ -186,7 +186,7 @@ public class TripServiceImpl implements TripService {
 
         Trip updatedTrip = tripRepository.save(trip);
 
-        // Create notification for the other party
+        // Create a notification for the other party
         User recipient = isDriver ? trip.getCustomer().getUser() : trip.getDriver().getUser();
         String title = "Trip " + request.getStatus();
         String message = "Your trip has been " + request.getStatus();
@@ -234,7 +234,7 @@ public class TripServiceImpl implements TripService {
                         .completedAt(trip.getCompletedAt())
                         .fare("completed".equals(trip.getStatus()) ? trip.getActualFare() : trip.getEstimatedFare())
                         .vehicleType(trip.getVehicleType())
-                        // Sửa đoạn code lấy rating
+                        // Sửa code lấy rating
                         .rating(trip.getRatings() != null ? trip.getRatings().stream()
                                 .filter(rating -> rating.getRater() != null &&
                                         rating.getRater().getUserId().equals(finalUserUuid))

@@ -39,12 +39,12 @@ public class PaymentServiceImpl implements PaymentService {
         Trip trip = tripRepository.findById(request.getTripId())
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", request.getTripId().toString()));
 
-        // Check if user is the customer of this trip
+        // Check if the user is the customer of this trip
         if (!trip.getCustomer().getCustomerId().equals(UUID.fromString(userId))) {
             throw new BadRequestException("You are not authorized to make payment for this trip");
         }
 
-        // Check if trip is completed
+        // Check if a trip is completed
         if (!"completed".equals(trip.getStatus())) {
             throw new BadRequestException("Cannot make payment for a trip that is not completed");
         }
@@ -85,7 +85,7 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment", "id", paymentId.toString()));
 
-        // Check if user is the customer of this trip
+        // Check if the user is the customer of this trip
         if (!payment.getTrip().getCustomer().getCustomerId().equals(UUID.fromString(userId)) &&
                 !payment.getTrip().getDriver().getDriverId().equals(UUID.fromString(userId))) {
             throw new BadRequestException("You are not authorized to view this payment");
@@ -145,7 +145,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentMethod paymentMethod = paymentMethodRepository.findById(methodId)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment method", "id", methodId.toString()));
 
-        // Check if user is the owner of this payment method
+        // Check if the user is the owner of this payment method
         if (!paymentMethod.getUser().getUserId().equals(UUID.fromString(userId))) {
             throw new BadRequestException("You are not authorized to delete this payment method");
         }

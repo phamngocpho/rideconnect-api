@@ -2,7 +2,6 @@ package com.rideconnect.service.impl;
 
 import com.rideconnect.dto.request.location.LocationUpdateRequest;
 import com.rideconnect.dto.response.location.NearbyDriversResponse;
-import com.rideconnect.entity.Driver;
 import com.rideconnect.entity.DriverLocation;
 import com.rideconnect.entity.LocationHistory;
 import com.rideconnect.entity.User;
@@ -39,7 +38,7 @@ public class LocationServiceImpl implements LocationService {
         User user = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
-        // Create location point
+        // Create a location point
         Point location = locationUtils.createPoint(request.getLatitude(), request.getLongitude());
 
         // Save to location history
@@ -51,7 +50,7 @@ public class LocationServiceImpl implements LocationService {
                 .build();
         locationHistoryRepository.save(locationHistory);
 
-        // If user is a driver, update current location
+        // If a user is a driver, update the current location
         driverRepository.findById(UUID.fromString(userId)).ifPresent(driver -> {
             DriverLocation driverLocation = driverLocationRepository.findById(driver.getDriverId())
                     .orElse(new DriverLocation());

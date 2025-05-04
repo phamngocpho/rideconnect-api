@@ -57,16 +57,11 @@ public class PriceCalculator {
             return CAR_MULTIPLIER;
         }
 
-        switch (vehicleType.toLowerCase()) {
-            case "motorcycle":
-                return MOTORCYCLE_MULTIPLIER;
-            case "suv":
-                return SUV_MULTIPLIER;
-            case "premium":
-                return PREMIUM_MULTIPLIER;
-            case "car":
-            default:
-                return CAR_MULTIPLIER;
-        }
+        return switch (vehicleType.toLowerCase()) {
+            case "motorcycle" -> MOTORCYCLE_MULTIPLIER;
+            case "suv" -> SUV_MULTIPLIER;
+            case "premium" -> PREMIUM_MULTIPLIER;
+            default -> CAR_MULTIPLIER;
+        };
     }
 }

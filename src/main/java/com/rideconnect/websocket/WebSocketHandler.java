@@ -11,6 +11,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -33,7 +34,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         // Handle incoming messages if needed
         // For this app, most communication is server-initiated
     }
@@ -55,14 +56,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
     }
 
     /**
-     * Send trip request to driver
+     * Send trip request to drivers
      */
     public void sendTripRequestToDriver(String driverId, Object data) {
         sendMessageToUser(driverId, "trip_request", data);
     }
 
     /**
-     * Send message to specific user
+     * Send messages to a specific user
      */
     public void sendMessageToUser(String userId, String type, Object data) {
         WebSocketSession session = userSessions.get(userId);
@@ -86,7 +87,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         }
 
         // Extract from query parameters
-        String query = session.getUri().getQuery();
+        String query = Objects.requireNonNull(session.getUri()).getQuery();
         if (query != null && query.contains("userId=")) {
             String[] params = query.split("&");
             for (String param : params) {

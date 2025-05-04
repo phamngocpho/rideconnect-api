@@ -31,12 +31,12 @@ public class RatingServiceImpl implements RatingService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
-        // Check if trip is completed
+        // Check if a trip is completed
         if (!(("completed").equals(trip.getStatus()))) {
             throw new BadRequestException("Cannot rate a trip that is not completed");
         }
 
-        // Check if user is either customer or driver of this trip
+        // Check if the user is either customer or driver of this trip
         UUID userUuid = UUID.fromString(userId);
         boolean isDriver = trip.getDriver().getDriverId().equals(userUuid);
         boolean isCustomer = trip.getCustomer().getCustomerId().equals(userUuid);
@@ -45,7 +45,7 @@ public class RatingServiceImpl implements RatingService {
             throw new BadRequestException("You are not authorized to rate this trip");
         }
 
-        // Check if user has already rated this trip
+        // Check if a user has already rated this trip
         if (tripRatingRepository.existsByTripTripIdAndRaterUserId(tripId, userUuid)) {
             throw new BadRequestException("You have already rated this trip");
         }
@@ -86,7 +86,7 @@ public class RatingServiceImpl implements RatingService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
-        // Check if user is either customer or driver of this trip
+        // Check if the user is either customer or driver of this trip
         UUID userUuid = UUID.fromString(userId);
         boolean isDriver = trip.getDriver().getDriverId().equals(userUuid);
         boolean isCustomer = trip.getCustomer().getCustomerId().equals(userUuid);
@@ -95,7 +95,7 @@ public class RatingServiceImpl implements RatingService {
             throw new BadRequestException("You are not authorized to view this rating");
         }
 
-        // Get rating given by this user
+        // Get a rating given by this user
         Rating rating = tripRatingRepository.findByTripTripIdAndRaterUserId(tripId, userUuid)
                 .orElseThrow(() -> new ResourceNotFoundException("Rating", "tripId and userId", tripId + " and " + userId));
         return mapRatingToRatingResponse(rating);

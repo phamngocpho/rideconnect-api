@@ -27,7 +27,7 @@ public class JwtTokenProvider {
     }
 
     /**
-     * Generate token from authentication object
+     * Generate token from the authentication object
      */
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
