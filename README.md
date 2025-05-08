@@ -127,16 +127,16 @@ git clone https://github.com/phamngocpho/rideconnect-api.git
 cd rideconnect-api
 ./mvnw clean
 
-# Chạy với profile mặc định
+# Run with default profile
 ./mvnw spring-boot:run
 
-# Chạy với profile dev (Linux/macOS)
+# Run with dev profile (Linux/macOS)
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 
-# Chạy với profile dev (Windows - CMD)
+# Run with dev profile (Windows - CMD)
 mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=dev"
 
-# Chạy với profile dev (Windows - PowerShell)
+# Run with dev profile (Windows - PowerShell)
 .\mvnw spring-boot:run "-Dspring-boot.run.profiles=dev"
 ```
 
@@ -162,6 +162,7 @@ To run with a specific profile, use one of the commands below:
 
 # Using JAR file
 java -jar target/RideConnectApplication-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
+```
 
 ## 📡 API Endpoints
 
