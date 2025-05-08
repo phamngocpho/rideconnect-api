@@ -126,7 +126,18 @@ SERVER_PORT=8080
 git clone https://github.com/phamngocpho/rideconnect-api.git
 cd rideconnect-api
 ./mvnw clean
+
+# Chạy với profile mặc định
 ./mvnw spring-boot:run
+
+# Chạy với profile dev (Linux/macOS)
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Chạy với profile dev (Windows - CMD)
+mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=dev"
+
+# Chạy với profile dev (Windows - PowerShell)
+.\mvnw spring-boot:run "-Dspring-boot.run.profiles=dev"
 ```
 
 #### Using Docker
@@ -135,6 +146,22 @@ cd rideconnect-api
 docker build -t rideconnect-api .
 docker run -p 8080:8080 --env-file .env rideconnect-api
 ```
+## 🔧 Application Profiles
+
+The application supports different profiles for various environments:
+
+- **dev**: Development environment with debug logging and H2 console enabled
+- **prod**: Production environment with optimized settings
+- **test**: Testing environment for automated tests
+
+To run with a specific profile, use one of the commands below:
+
+```bash
+# Using Maven
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Using JAR file
+java -jar target/RideConnectApplication-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
 
 ## 📡 API Endpoints
 
