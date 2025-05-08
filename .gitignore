@@ -31,3 +31,27 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Application Specific ###
+src/main/resources/application-dev.properties
+src/main/resources/application-prod.properties
+.env
+logs/
+uploads/
+
+### Node.js ###
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.pnp/
+.pnp.js
+.npm/
+.yarn/
+.yarn-integrity
+package-lock.json
+yarn.lock
+
+### Frontend build output ###
+src/main/resources/static/built/
+src/main/resources/public/
