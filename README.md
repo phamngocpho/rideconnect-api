@@ -125,8 +125,8 @@ SERVER_PORT=8080
 ```bash
 git clone https://github.com/phamngocpho/rideconnect-api.git
 cd rideconnect-api
-mvn clean install
-mvn spring-boot:run
+./mvnw clean
+./mvnw spring-boot:run
 ```
 
 #### Using Docker
