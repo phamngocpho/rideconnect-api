@@ -195,6 +195,13 @@ ws://your-domain/ws
 
 - Swagger UI: `http://localhost:8080/swagger-ui.html`
 - API Docs: `http://localhost:8080/v3/api-docs`
+- Project Info: `http://localhost:8080/api/project`
+  - Provides a responsive web interface with:
+    - Project overview and features
+    - Technical stack information
+    - Developer information
+    - Supports both English and Vietnamese languages
+    - Dark/Light theme toggle
 
 ## 🔍 Monitoring
 
