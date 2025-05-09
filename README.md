@@ -98,24 +98,24 @@ CREATE EXTENSION postgis;
 
 ### 2. Environment Configuration
 
-Create `.env` file in root directory:
+Create `application-dev.properties` file in the `src/main/resources` directory:
 
 ```properties
 # Database
-DATABASE_URL=jdbc:postgresql://localhost:5432/rideconnect
-DATABASE_USERNAME=your_username
-DATABASE_PASSWORD=your_password
+spring.datasource.url=jdbc:postgresql://localhost:5432/rideconnect
+spring.datasource.username=your_username
+spring.datasource.password=your_password
 
 # Goong Maps
-GOONG_API_KEY=your_api_key
-GOONG_MAPTILES_KEY=your_maptiles_key
+goong.api.key=your_api_key
+goong.maptiles.key=your_maptiles_key
 
 # JWT
-JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRATION=86400000
+jwt.secret=your_jwt_secret_key
+jwt.expiration=86400000
 
 # Server
-SERVER_PORT=8080
+server.port=8080
 ```
 
 ### 3. Application Deployment
