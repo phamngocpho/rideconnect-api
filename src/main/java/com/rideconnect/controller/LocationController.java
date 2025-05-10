@@ -30,15 +30,9 @@ public class LocationController {
     @GetMapping("/nearby-drivers")
     public ResponseEntity<NearbyDriversResponse> getNearbyDrivers(
             @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @ModelAttribute NearbyDriversRequest request) {
+            @Valid @ModelAttribute NearbyDriversRequest request) { // Receive NearbyDriversRequest directly
         String userId = userDetails.getUsername();
-        NearbyDriversResponse response = locationService.findNearbyDrivers(
-                userId,
-                request.getLatitude(),
-                request.getLongitude(),
-                request.getRadiusInKm() != null ? request.getRadiusInKm() : 5000,
-                request.getVehicleType()
-        );
+        NearbyDriversResponse response = locationService.findNearbyDrivers(userId, request); // Pass the request object
         return ResponseEntity.ok(response);
     }
 }

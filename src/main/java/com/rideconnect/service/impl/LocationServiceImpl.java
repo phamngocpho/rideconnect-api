@@ -1,6 +1,7 @@
 package com.rideconnect.service.impl;
 
 import com.rideconnect.dto.request.location.LocationUpdateRequest;
+import com.rideconnect.dto.request.location.NearbyDriversRequest;
 import com.rideconnect.dto.response.location.NearbyDriversResponse;
 import com.rideconnect.entity.DriverLocation;
 import com.rideconnect.entity.LocationHistory;
@@ -69,10 +70,13 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional(readOnly = true)
-    public NearbyDriversResponse findNearbyDrivers(String userId, double latitude, double longitude, double radius, String vehicleType) {
-        // Tìm tài xế gần đó
+    public NearbyDriversResponse findNearbyDrivers(String userId, NearbyDriversRequest request) {
+        // Ensure radius is in meters
+        double radiusInMeters = request.getRadiusInKm() != null ? request.getRadiusInKm() * 1000 : 5000;
+
+        // Find nearby drivers
         List<Object[]> driversWithDistance = driverLocationRepository.findAvailableDriversWithinRadius(
-                latitude, longitude, radius, vehicleType);
+                request.getLatitude(), request.getLongitude(), radiusInMeters, request.getVehicleType());
 
         List<NearbyDriversResponse.DriverLocation> driverLocations = new ArrayList<>();
 
