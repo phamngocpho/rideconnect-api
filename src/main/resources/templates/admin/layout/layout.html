@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<!-- Kiểm tra role ADMIN ngay đầu trang -->
+<th:block sec:authorize="!hasRole('ROLE_ADMIN')">
+    <th:block th:replace="~{/403}"></th:block>
+</th:block>
+
+<!-- Nội dung chỉ hiển thị khi là ADMIN -->
+<th:block sec:authorize="hasRole('ROLE_ADMIN')">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin Dashboard</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-50">
+    <!-- Import Sidebar -->
+    <th:block th:replace="~{admin/components/sidebar :: sidebar}"></th:block>
+
+    <!-- Main Content -->
+    <main class="ml-64 p-6">
+        <!-- Import Header -->
+        <th:block th:replace="~{admin/components/header :: header}"></th:block>
+
+        <!-- Dynamic Content -->
+        <div layout:fragment="admin-content">
+            <!-- Nội dung từ các trang con sẽ được chèn vào đây -->
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script th:inline="javascript">
+        // Thêm các scripts cần thiết
+    </script>
+    </body>
+</th:block>
+</html>

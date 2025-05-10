@@ -1,230 +1,322 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RideConnect API - Mobile App Backend</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {}
-            }
-        }
-        
-        const translations = {
-            en: {
-                title: "RideConnect API",
-                subtitle: "Mobile App Backend",
-                introduction: "RideConnect API is a backend system built with Spring Boot, providing RESTful APIs for mobile ride-hailing applications. The system integrates with Goong Maps to support real-time location, routing, and fare calculation features.",
-                viewOnGithub: "View on GitHub",
-                features: "Key Features",
-                featuresList1: [
-                    "• User Authentication & Authorization",
-                    "• Location & Place Search",
-                    "• Real-time Trip Management",
-                    "• Automatic Fare Calculation"
-                ],
-                featuresList2: [
-                    "• Online Payment Integration",
-                    "• Rating System",
-                    "• Real-time Notifications",
-                    "• Trip History"
-                ],
-                techStack: "Technology Stack",
-                frontend: "Frontend",
-                backend: "Backend",
-                developer: "Developer",
-                role: "Fullstack Developer",
-                responsibilities: "Development responsibilities include:",
-                respList: [
-                    "REST API Design and Development",
-                    "Database Architecture",
-                    "Map and Location Services Integration",
-                    "Mobile UI Development"
-                ],
-                copyright: "© 2024 RideConnect. All rights reserved."
-            },
-            vi: {
-                title: "RideConnect API",
-                subtitle: "Backend cho ứng dụng đặt xe di động",
-                introduction: "RideConnect API là một hệ thống backend được xây dựng bằng Spring Boot, cung cấp các API RESTful cho ứng dụng đặt xe di động. Hệ thống tích hợp với Goong Maps để hỗ trợ các tính năng định vị, tìm đường và tính giá cước theo thời gian thực.",
-                viewOnGithub: "Xem mã nguồn trên GitHub",
-                features: "Tính năng chính",
-                featuresList1: [
-                    "• Xác thực và phân quyền người dùng",
-                    "• Định vị và tìm kiếm địa điểm",
-                    "• Quản lý chuyến đi thời gian thực",
-                    "• Tính giá cước tự động"
-                ],
-                featuresList2: [
-                    "• Tích hợp thanh toán trực tuyến",
-                    "• Hệ thống đánh giá",
-                    "• Thông báo thời gian thực",
-                    "• Lịch sử chuyến đi"
-                ],
-                techStack: "Công nghệ sử dụng",
-                frontend: "Frontend",
-                backend: "Backend",
-                developer: "Nhà phát triển",
-                role: "Fullstack Developer",
-                responsibilities: "Phát triển toàn bộ ứng dụng bao gồm:",
-                respList: [
-                    "Thiết kế và phát triển REST API",
-                    "Xây dựng cơ sở dữ liệu",
-                    "Tích hợp dịch vụ bản đồ và định vị",
-                    "Phát triển giao diện người dùng mobile"
-                ],
-                copyright: "© 2024 RideConnect. Đã đăng ký bản quyền."
-            }
-        };
-
-        function toggleTheme() {
-            const html = document.documentElement;
-            const isDark = html.classList.contains('dark');
-
-            if (isDark) {
-                html.classList.remove('dark');
-                localStorage.theme = 'light';
-            } else {
-                html.classList.add('dark');
-                localStorage.theme = 'dark';
-            }
-        }
-
-        function toggleLanguage() {
-            const html = document.documentElement;
-            const currentLang = html.getAttribute('lang');
-            const newLang = currentLang === 'en' ? 'vi' : 'en';
-
-            html.setAttribute('lang', newLang);
-            localStorage.setItem('language', newLang);
-            updateContent(newLang);
-        }
-
-        function updateContent(lang) {
-            const t = translations[lang];
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (t[key]) {
-                    if (Array.isArray(t[key])) {
-                        element.innerHTML = t[key].join('<br>');
-                    } else {
-                        element.textContent = t[key];
-                    }
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            }
-
-            const savedLang = localStorage.getItem('language') || 'en';
-            document.documentElement.setAttribute('lang', savedLang);
-            updateContent(savedLang);
-        });
-    </script>
+    <title>RideConnect - Dịch vụ đặt xe trực tuyến hàng đầu</title>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-<div class="min-h-screen">
-    <header class="bg-white dark:bg-gray-800 shadow">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white" data-i18n="title">RideConnect API</h1>
-                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300" data-i18n="subtitle">Mobile App Backend</p>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button onclick="toggleLanguage()" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-sm font-medium">
-                    <span class="lang-en">🇺🇸 EN</span>
-                    <span class="lang-vi hidden">🇻🇳 VI</span>
-                </button>
-                <button onclick="toggleTheme()" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 block dark:hidden text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
-            </div>
+<body>
+<div layout:fragment="content">
+    <!-- Hero Section -->
+    <section class="relative h-screen flex items-center">
+        <!-- Background với overlay gradient -->
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-600/90 to-purple-600/90">
+            <div class="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center mix-blend-overlay"></div>
         </div>
-    </header>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg divide-y divide-gray-200 dark:divide-gray-700">
-            <div class="px-4 py-5 sm:px-6">
-                <h2 class="text-lg font-medium text-gray-900 dark:text-white" data-i18n="introduction">Project Introduction</h2>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" data-i18n="description"></p>
-                <div class="mt-3">
-                    <a href="https://github.com/phamngocpho/rideconnect-api" target="_blank" class="inline-flex items-center text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                        <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                        <span data-i18n="viewOnGithub">View on GitHub</span>
+        <!-- Hero Content -->
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl text-white">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+                    Di chuyển thông minh cùng RideConnect
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-gray-100">
+                    Kết nối hành khách và tài xế một cách nhanh chóng, an toàn và tiện lợi
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="/register" class="btn-primary">
+                        Đăng ký ngay
+                    </a>
+                    <a href="#features" class="btn-secondary">
+                        Tìm hiểu thêm
                     </a>
                 </div>
             </div>
+        </div>
 
-            <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4" data-i18n="features">Key Features</h3>
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700 p-4">
-                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300" data-i18n="featuresList1"></ul>
-                    </div>
-                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700 p-4">
-                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300" data-i18n="featuresList2"></ul>
-                    </div>
-                </div>
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-white">
+                    Tại sao chọn RideConnect?
+                </h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    Chúng tôi cung cấp dịch vụ đặt xe chất lượng cao với nhiều tính năng ưu việt
+                </p>
             </div>
 
-            <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4" data-i18n="techStack">Technology Stack</h3>
-                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700 p-4">
-                        <h4 class="font-semibold text-gray-900 dark:text-white" data-i18n="frontend">Frontend</h4>
-                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                            <li>• Kotlin</li>
-                            <li>• Jetpack Compose</li>
-                            <li>• Material Design 3</li>
-                        </ul>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-14 h-14 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                     </div>
-                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700 p-4">
-                        <h4 class="font-semibold text-gray-900 dark:text-white" data-i18n="backend">Backend</h4>
-                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                            <li>• Spring Boot 3.4.4</li>
-                            <li>• PostgreSQL + PostGIS</li>
-                            <li>• WebSocket</li>
-                            <li>• Goong Map API</li>
-                        </ul>
-                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">Đặt xe nhanh chóng</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Chỉ với vài thao tác đơn giản, bạn có thể đặt xe trong
+                        vòng vài giây</p>
                 </div>
-            </div>
 
-            <div class="px-4 py-5 sm:p-6">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4" data-i18n="developer">Developer</h3>
-                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 max-w-md">
-                    <div class="font-semibold text-gray-900 dark:text-white">Phạm Ngọc Phổ</div>
-                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">23IT212</div>
-                    <div class="text-sm text-blue-600 dark:text-blue-400 mt-2" data-i18n="role">Fullstack Developer</div>
-                    <div class="text-sm text-gray-500 dark:text-gray-300 mt-2">
-                        <span data-i18n="responsibilities">Development responsibilities include:</span>
-                        <ul class="list-disc ml-5 mt-1 text-xs" data-i18n="respList"></ul>
+                <!-- Feature 2 -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-14 h-14 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
                     </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">An toàn tối đa</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Tài xế được xác thực kỹ càng, hành trình được theo dõi
+                        realtime</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">Giá cả hợp lý</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Mức giá cạnh tranh, minh bạch và không có phụ phí ẩn</p>
                 </div>
             </div>
         </div>
-    </main>
+    </section>
 
-    <footer class="bg-white dark:bg-gray-800 mt-8">
-        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-            <p class="text-center text-sm text-gray-500 dark:text-gray-400" data-i18n="copyright">
-                © 2024 RideConnect. All rights reserved.
-            </p>
+    <!-- How It Works Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white">
+                Cách thức hoạt động
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">1</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">Đăng ký tài khoản</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Tạo tài khoản nhanh chóng với email hoặc số điện
+                        thoại</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">2</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">Chọn điểm đến</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Nhập địa chỉ đón và điểm đến của bạn</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">3</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">Chọn loại xe</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Lựa chọn phương tiện phù hợp với nhu cầu</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-2xl font-bold text-blue-600 dark:text-blue-400">4</span>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800 dark:text-white">Bắt đầu hành trình</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Tài xế sẽ đón bạn trong thời gian ngắn nhất</p>
+                </div>
+            </div>
         </div>
-    </footer>
+    </section>
+
+    <!-- Download App Section -->
+    <section class="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                        Tải ứng dụng RideConnect ngay!
+                    </h2>
+                    <p class="text-xl mb-8 text-gray-100">
+                        Trải nghiệm dịch vụ đặt xe tốt nhất trên điện thoại của bạn
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#" class="transform hover:scale-105 transition-transform duration-300">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg"
+                                 alt="Download on App Store"
+                                 class="h-12">
+                        </a>
+                        <a href="#" class="transform hover:scale-105 transition-transform duration-300">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg"
+                                 alt="Get it on Google Play"
+                                 class="h-12">
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="/images/app-mockup.png"
+                         alt="RideConnect App"
+                         class="max-w-md mx-auto rounded-lg shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16 text-gray-800 dark:text-white">
+                Khách hàng nói gì về chúng tôi
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <img src="/images/avatar1.jpg" alt="Avatar" class="w-12 h-12 rounded-full">
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Nguyễn Văn A</h4>
+                            <div class="flex text-yellow-400">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        "Dịch vụ rất tốt, tài xế chuyên nghiệp và đúng giờ. Tôi sẽ tiếp tục sử dụng RideConnect!"
+                    </p>
+                </div>
+
+                <!-- Testimonial 2 -->
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <img src="/images/avatar2.jpg" alt="Avatar" class="w-12 h-12 rounded-full">
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Trần Thị B</h4>
+                            <div class="flex text-yellow-400">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        "Ứng dụng rất dễ sử dụng, giá cả hợp lý. Tôi đặc biệt thích tính năng theo dõi hành trình."
+                    </p>
+                </div>
+
+                <!-- Testimonial 3 -->
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                    <div class="flex items-center mb-4">
+                        <img src="/images/avatar3.jpg" alt="Avatar" class="w-12 h-12 rounded-full">
+                        <div class="ml-4">
+                            <h4 class="font-semibold text-gray-800 dark:text-white">Lê Văn C</h4>
+                            <div class="flex text-yellow-400">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        "Tôi là tài xế của RideConnect. Nền tảng này giúp tôi kiếm thêm thu nhập một cách linh hoạt."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-center text-white">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    Sẵn sàng trải nghiệm RideConnect?
+                </h2>
+                <p class="text-xl mb-8 text-gray-100">
+                    Đăng ký ngay hôm nay để nhận nhiều ưu đãi hấp dẫn
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="/register"
+                       class="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors duration-200">
+                        Đăng ký tài khoản
+                    </a>
+                    <a href="/driver-register"
+                       class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 rounded-lg font-semibold transition-all duration-200">
+                        Trở thành tài xế
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Style Section -->
+    <style>
+        .btn-primary {
+            @apply bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold transition-colors duration-200;
+        }
+
+        .btn-secondary {
+            @apply bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 rounded-lg font-semibold transition-all duration-200;
+        }
+    </style>
 </div>
 </body>
 </html>

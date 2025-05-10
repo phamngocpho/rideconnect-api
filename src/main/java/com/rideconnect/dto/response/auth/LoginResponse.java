@@ -7,18 +7,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginResponse {
-
     private UUID userId;
-    private String token;
     private String fullName;
     private String phoneNumber;
     private String email;
+    private String role;
     private String avatarUrl;
-    private String userType;
+    private String token;
 }

@@ -1,0 +1,133 @@
+    <!DOCTYPE html>
+    <html lang="vi" class="light" xmlns:th="http://www.thymeleaf.org"
+          xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title layout:title-pattern="RideConnect">RideConnect</title>
+
+        <!-- TailwindCSS -->
+        <!-- Đầu tiên, thêm script để block render cho đến khi theme được áp dụng -->
+        <script>
+            // Prevent Flash Of Incorrect Theme (FOIT)
+            (function() {
+                document.documentElement.style.visibility = 'hidden';
+            })();
+        </script>
+
+        <!-- Tailwind CDN -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Theme Configuration -->
+        <script>
+            // 1. Cấu hình Tailwind
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {}
+                }
+            }
+
+            // 2. Theme Management
+            const themeManager = {
+                init() {
+                    // Áp dụng theme từ localStorage hoặc system preference
+                    if (localStorage.theme === 'dark' ||
+                        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    // Cho phép render sau khi đã áp dụng theme
+                    document.documentElement.style.visibility = 'visible';
+                },
+
+                toggle() {
+                    const html = document.documentElement;
+                    const isDark = html.classList.contains('dark');
+
+                    // Thêm transition
+                    html.classList.add('theme-transition');
+
+                    // Toggle theme
+                    if (isDark) {
+                        html.classList.remove('dark');
+                        localStorage.theme = 'light';
+                    } else {
+                        html.classList.add('dark');
+                        localStorage.theme = 'dark';
+                    }
+
+                    // Xóa class transition
+                    setTimeout(() => {
+                        html.classList.remove('theme-transition');
+                    }, 300);
+                }
+            };
+
+            // 3. Khởi tạo theme khi DOM loaded
+            document.addEventListener('DOMContentLoaded', () => {
+                themeManager.init();
+                // Gán function toggle vào window để có thể gọi từ onclick
+                window.toggleTheme = themeManager.toggle;
+            });
+        </script>
+
+        <!-- Theme Styles -->
+        <style>
+            /* Base transitions */
+            html {
+                transition: background-color 0.3s ease, color 0.3s ease;
+            }
+
+            html.theme-transition,
+            html.theme-transition *,
+            html.theme-transition *:before,
+            html.theme-transition *:after {
+                transition: background-color 0.3s ease !important;
+            }
+
+            /* Theme variables */
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #1f2937;
+            }
+
+            :root.dark {
+                --bg-color: #111827;
+                --text-color: #f9fafb;
+            }
+
+            /* Apply theme colors */
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+            }
+        </style>
+
+    </head>
+    <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <!-- Header -->
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="min-h-screen">
+        <div layout:fragment="content">
+            <!-- Page content will be inserted here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <!-- Common JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Các script chung cho tất cả trang
+        });
+    </script>
+
+    <!-- Additional JavaScript for specific pages -->
+    <th:block layout:fragment="js"></th:block>
+    </body>
+    </html>

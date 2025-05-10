@@ -1,5 +1,4 @@
 package com.rideconnect.entity;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,10 +25,10 @@ public class Driver {
     @MapsId
     private User user;
 
-    @Column(name = "license_number", unique = true, nullable = false)
+    @Column(name = "license_number", unique = true, nullable = true)
     private String licenseNumber;
 
-    @Column(name = "vehicle_type", nullable = false)
+    @Column(name = "vehicle_type", nullable = true)
     private String vehicleType;
 
     @Column(name = "vehicle_brand")
@@ -38,7 +37,7 @@ public class Driver {
     @Column(name = "vehicle_model")
     private String vehicleModel;
 
-    @Column(name = "vehicle_plate", unique = true, nullable = false)
+    @Column(name = "vehicle_plate", unique = true, nullable = true)
     private String vehiclePlate;
 
     @Column(name = "rating", precision = 3, scale = 2)
@@ -53,6 +52,9 @@ public class Driver {
     @Column(name = "documents_verified")
     private Boolean documentsVerified;
 
+    @Column(name = "profile_completed")
+    private Boolean profileCompleted;
+
     @PrePersist
     protected void onCreate() {
         if (this.rating == null) {
@@ -66,6 +68,9 @@ public class Driver {
         }
         if (this.documentsVerified == null) {
             this.documentsVerified = false;
+        }
+        if (this.profileCompleted == null) {
+            this.profileCompleted = false;
         }
     }
 }

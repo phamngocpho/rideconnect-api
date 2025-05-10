@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" class="light" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
+<head>
+  <title>Dashboard</title>
+
+  <!-- Dashboard-specific CSS -->
+  <th:block layout:fragment="css">
+    <style>
+      .sidebar {
+        height: calc(100vh - 64px);
+      }
+    </style>
+  </th:block>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="flex">
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 bg-white dark:bg-gray-800 shadow-md">
+      <div class="px-4 py-5">
+        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Menu</h3>
+        <nav class="mt-5">
+          <ul class="space-y-2">
+            <li layout:fragment="sidebar-menu">
+              <!-- Sidebar menu items will be inserted here -->
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
+      <div layout:fragment="dashboard-content">
+        <!-- Dashboard-specific content will be inserted here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dashboard-specific JavaScript -->
+<th:block layout:fragment="js">
+  <script>
+    // Common dashboard scripts
+  </script>
+</th:block>
+</body>
+</html>

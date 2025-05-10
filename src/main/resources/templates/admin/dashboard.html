@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout/layout}">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<div layout:fragment="admin-content">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3>Tổng chuyến đi</h3>
+            <p class="text-2xl font-bold">1,245</p>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h3>Chuyến hủy</h3>
+            <p class="text-2xl font-bold">56</p>
+        </div>
+        <!-- Thêm các thống kê khác -->
+    </div>
+
+    <!-- Map View -->
+    <div class="mt-6 bg-white p-6 rounded-lg shadow">
+        <h3 class="text-lg font-semibold mb-4">God's View</h3>
+        <div id="map" class="h-[500px]">
+            <!-- Map content -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

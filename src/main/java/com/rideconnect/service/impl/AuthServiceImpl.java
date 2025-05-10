@@ -5,15 +5,14 @@ import com.rideconnect.dto.request.auth.RegisterRequest;
 import com.rideconnect.dto.response.auth.LoginResponse;
 import com.rideconnect.dto.response.auth.RegisterResponse;
 import com.rideconnect.entity.Customer;
+import com.rideconnect.entity.Driver;
 import com.rideconnect.entity.User;
-import com.rideconnect.exception.BadRequestException;
-import com.rideconnect.exception.UnauthorizedException;
 import com.rideconnect.repository.CustomerRepository;
 import com.rideconnect.repository.DriverRepository;
 import com.rideconnect.repository.UserRepository;
-import com.rideconnect.security.JwtTokenProvider;
 import com.rideconnect.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -33,109 +33,128 @@ public class AuthServiceImpl implements AuthService {
     private final DriverRepository driverRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public RegisterResponse register(RegisterRequest request) {
-        // Check if a phone number already exists
+        System.out.println("===== STARTING REGISTRATION PROCESS =====");
+        System.out.println("Email: " + request.getEmail());
+        System.out.println("Phone: " + request.getPhoneNumber());
+        System.out.println("Role: " + request.getRole());
+
+        log.info("Starting user registration process for: {}", request.getEmail());
+
+        // Kiểm tra số điện thoại đã tồn tại chưa
+        log.debug("Checking if phone number already exists: {}", request.getPhoneNumber());
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-            throw new BadRequestException("Phone number already registered");
+            log.warn("Phone number already exists: {}", request.getPhoneNumber());
+            return RegisterResponse.builder()
+                    .success(false)
+                    .message("Số điện thoại đã được sử dụng")
+                    .build();
         }
 
-        // Check if email already exists (if provided)
-        if (request.getEmail() != null && !request.getEmail().isEmpty() &&
-                userRepository.existsByEmail(request.getEmail())) {
-            throw new BadRequestException("Email already registered");
+        // Kiểm tra email đã tồn tại chưa
+        log.debug("Checking if email already exists: {}", request.getEmail());
+        if (userRepository.existsByEmail(request.getEmail())) {
+            log.warn("Email already exists: {}", request.getEmail());
+            return RegisterResponse.builder()
+                    .success(false)
+                    .message("Email đã được sử dụng")
+                    .build();
         }
 
-        // Create a user entity
-        User user = User.builder()
-                .phoneNumber(request.getPhoneNumber())
-                .email(request.getEmail())
-                .passwordHash(passwordEncoder.encode(request.getPassword()))
-                .fullName(request.getFullName())
-                .build();
+        try {
+            // Tạo user mới
+            String role = request.getRole();
+            log.info("Creating new user with role: {}", role);
 
-        // Save user
-        User savedUser = userRepository.save(user);
+            User user = User.builder()
+                    .fullName(request.getFullName())
+                    .phoneNumber(request.getPhoneNumber())
+                    .email(request.getEmail())
+                    .passwordHash(passwordEncoder.encode(request.getPassword()))
+                    .role(role)
+                    .status("active")
+                    .build();
 
-        // Create a customer entity
-        Customer customer = Customer.builder()
-                .customerId(savedUser.getUserId())
-                .user(savedUser)
-                .build();
+            log.debug("Saving user to database: {}", user);
+            System.out.println("Attempting to save user to database...");
+            User savedUser = userRepository.save(user);
+            System.out.println("USER SAVED SUCCESSFULLY: " + savedUser.getUserId());
+            log.info("User saved successfully with ID: {}", savedUser.getUserId());
 
-        // Save customer
-        customerRepository.save(customer);
+            // Tạo customer/driver dựa vào role
+            if ("ROLE_CUSTOMER".equals(role)) {
+                log.info("Creating customer profile for user ID: {}", savedUser.getUserId());
+                Customer customer = Customer.builder()
+                        .user(savedUser)
+                        .build();
+                Customer savedCustomer = customerRepository.save(customer);
+                log.info("Customer profile created with ID: {}", savedCustomer.getCustomerId());
+            } else if ("ROLE_DRIVER".equals(role)) {
+                log.info("Creating driver profile for user ID: {}", savedUser.getUserId());
 
-        // Generate token
-        String token = jwtTokenProvider.generateToken(savedUser.getUserId().toString());
+                // Tạo giá trị tạm thời duy nhất cho licenseNumber và vehiclePlate
+                String tempLicenseNumber = "PENDING_" + UUID.randomUUID().toString();
+                String tempVehiclePlate = "PENDING_" + UUID.randomUUID().toString();
 
-        // Return response
-        return RegisterResponse.builder()
-                .userId(savedUser.getUserId())
-                .token(token)
-                .build();
+                Driver driver = Driver.builder()
+                        .user(savedUser)
+                        .licenseNumber(tempLicenseNumber) // Giá trị duy nhất
+                        .vehicleType("Cần cập nhật")
+                        .vehiclePlate(tempVehiclePlate) // Giá trị duy nhất
+                        .profileCompleted(false) // Đánh dấu hồ sơ chưa hoàn thành
+                        .build();
+                Driver savedDriver = driverRepository.save(driver);
+                log.info("Driver profile created with ID: {}", savedDriver.getDriverId());
+            } else {
+                log.warn("Unknown role provided: {}", role);
+            }
+
+            log.info("Registration completed successfully for user ID: {}", savedUser.getUserId());
+            return RegisterResponse.builder()
+                    .userId(savedUser.getUserId())
+                    .fullName(savedUser.getFullName())
+                    .phoneNumber(savedUser.getPhoneNumber())
+                    .email(savedUser.getEmail())
+                    .role(savedUser.getRole())
+                    .success(true)
+                    .message("Đăng ký thành công")
+                    .build();
+        } catch (Exception e) {
+            log.error("Error during user registration", e);
+            throw e;
+        }
     }
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        try {
-            // Authenticate user
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getPhoneNumber(),
-                            request.getPassword()
-                    )
-            );
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getPhoneNumber(),
+                        request.getPassword()
+                )
+        );
 
-            // Set authentication to a security context
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Get user from a repository
-            User user = userRepository.findByPhoneNumber(request.getPhoneNumber())
-                    .orElseThrow(() -> new UnauthorizedException("Invalid phone number or password"));
+        User user = userRepository.findByPhoneNumber(request.getPhoneNumber())
+                .orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
 
-            // Xác định userType
-            String userType = determineUserType(user.getUserId());
-
-            // Generate token
-            String token = jwtTokenProvider.generateToken(user.getUserId().toString());
-
-            // Return response
-            return LoginResponse.builder()
-                    .userId(user.getUserId())
-                    .token(token)
-                    .fullName(user.getFullName())
-                    .phoneNumber(user.getPhoneNumber())
-                    .email(user.getEmail())
-                    .avatarUrl(user.getAvatarUrl())
-                    .userType(userType)  // Thêm userType vào response
-                    .build();
-        } catch (Exception e) {
-            throw new UnauthorizedException("Invalid phone number or password");
-        }
+        return LoginResponse.builder()
+                .userId(user.getUserId())
+                .fullName(user.getFullName())
+                .phoneNumber(user.getPhoneNumber())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .avatarUrl(user.getAvatarUrl())
+                .build();
     }
-
-    // Phương thức này để xác định userType
-    private String determineUserType(UUID userId) {
-        if (driverRepository.existsById(userId)) {
-            return "DRIVER";
-        }
-
-        customerRepository.existsById(userId);
-
-        return "CUSTOMER";
-    }
-
 
     @Override
     public void logout(String token) {
-        // Thay thế phương thức invalidateToken bằng một phương thức khác hoặc thêm phương thức này vào JwtTokenProvider
-        // Ví dụ:
-        // jwtTokenProvider.addToBlacklist(token);
-        // HOẶC
-        // Không làm gì cả nếu sử dụng JWT stateless
+        // Không cần thực hiện gì trong web interface
+        // Session được quản lý bởi Spring Security
     }
 }

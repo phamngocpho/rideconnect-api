@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RideConnect API - Mobile App Backend</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {}
+            }
+        }
+
+        const translations = {
+            en: {
+                title: "RideConnect API",
+                subtitle: "Mobile App Backend",
+                introduction: "RideConnect API is a backend system built with Spring Boot, providing RESTful APIs for mobile ride-hailing applications. The system integrates with Goong Maps to support real-time location, routing, and fare calculation features.",
+                viewOnGithub: "View on GitHub",
+                features: "Key Features",
+                featuresList1: [
+                    "• User Authentication & Authorization",
+                    "• Location & Place Search",
+                    "• Real-time Trip Management",
+                    "• Automatic Fare Calculation"
+                ],
+                featuresList2: [
+                    "• Online Payment Integration",
+                    "• Rating System",
+                    "• Real-time Notifications",
+                    "• Trip History"
+                ],
+                techStack: "Technology Stack",
+                frontend: "Frontend",
+                backend: "Backend",
+                developer: "Developer",
+                role: "Fullstack Developer",
+                responsibilities: "Development responsibilities include:",
+                respList: [
+                    "REST API Design and Development",
+                    "Database Architecture",
+                    "Map and Location Services Integration",
+                    "Mobile UI Development"
+                ],
+                copyright: "© 2024 RideConnect. All rights reserved."
+            },
+            vi: {
+                title: "RideConnect API",
+                subtitle: "Backend cho ứng dụng đặt xe di động",
+                introduction: "RideConnect API là một hệ thống backend được xây dựng bằng Spring Boot, cung cấp các API RESTful cho ứng dụng đặt xe di động. Hệ thống tích hợp với Goong Maps để hỗ trợ các tính năng định vị, tìm đường và tính giá cước theo thời gian thực.",
+                viewOnGithub: "Xem mã nguồn trên GitHub",
+                features: "Tính năng chính",
+                featuresList1: [
+                    "• Xác thực và phân quyền người dùng",
+                    "• Định vị và tìm kiếm địa điểm",
+                    "• Quản lý chuyến đi thời gian thực",
+                    "• Tính giá cước tự động"
+                ],
+                featuresList2: [
+                    "• Tích hợp thanh toán trực tuyến",
+                    "• Hệ thống đánh giá",
+                    "• Thông báo thời gian thực",
+                    "• Lịch sử chuyến đi"
+                ],
+                techStack: "Công nghệ sử dụng",
+                frontend: "Frontend",
+                backend: "Backend",
+                developer: "Nhà phát triển",
+                role: "Fullstack Developer",
+                responsibilities: "Phát triển toàn bộ ứng dụng bao gồm:",
+                respList: [
+                    "Thiết kế và phát triển REST API",
+                    "Xây dựng cơ sở dữ liệu",
+                    "Tích hợp dịch vụ bản đồ và định vị",
+                    "Phát triển giao diện người dùng mobile"
+                ],
+                copyright: "© 2024 RideConnect. Đã đăng ký bản quyền."
+            }
+        };
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+
+            if (isDark) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        function toggleLanguage() {
+            const html = document.documentElement;
+            const currentLang = html.getAttribute('lang');
+            const newLang = currentLang === 'en' ? 'vi' : 'en';
+
+            html.setAttribute('lang', newLang);
+            localStorage.setItem('language', newLang);
+            updateContent(newLang);
+        }
+
+        function updateContent(lang) {
+            const t = translations[lang];
+
+            document.querySelector('.lang-en').classList.toggle('hidden', lang !== 'en');
+            document.querySelector('.lang-vi').classList.toggle('hidden', lang !== 'vi');
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (t[key]) {
+                    if (Array.isArray(t[key])) {
+                        element.innerHTML = t[key].join('<br>');
+                    } else {
+                        element.textContent = t[key];
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            }
+
+            const savedLang = localStorage.getItem('language') || 'en';
+            document.documentElement.setAttribute('lang', savedLang);
+            updateContent(savedLang);
+        });
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+<div class="min-h-screen">
+    <header class="bg-white dark:bg-gray-800 shadow">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white" data-i18n="title">RideConnect API</h1>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300" data-i18n="subtitle">Mobile App Backend</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleLanguage()" class="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-sm font-medium">
+                    <span class="lang-en">🇺🇸 EN</span>
+                    <span class="lang-vi hidden">🇻🇳 VI</span>
+                </button>
+                <button onclick="toggleTheme()" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 block dark:hidden text-gray-900" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg divide-y divide-gray-200 dark:divide-gray-700">
+            <div class="px-4 py-5 sm:px-6">
+                <h2 class="text-lg font-medium text-gray-900 dark:text-white" data-i18n="introduction">Project Introduction</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" data-i18n="description"></p>
+                <div class="mt-3">
+                    <a href="https://github.com/phamngocpho/rideconnect-api" target="_blank" class="inline-flex items-center text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                        <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        <span data-i18n="viewOnGithub">View on GitHub</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4" data-i18n="features">Key Features</h3>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700 p-4">
+                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300" data-i18n="featuresList1"></ul>
+                    </div>
+                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700 p-4">
+                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300" data-i18n="featuresList2"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4" data-i18n="techStack">Technology Stack</h3>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700 p-4">
+                        <h4 class="font-semibold text-gray-900 dark:text-white" data-i18n="frontend">Frontend</h4>
+                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                            <li>• Kotlin</li>
+                            <li>• Jetpack Compose</li>
+                            <li>• Material Design 3</li>
+                        </ul>
+                    </div>
+                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700 p-4">
+                        <h4 class="font-semibold text-gray-900 dark:text-white" data-i18n="backend">Backend</h4>
+                        <ul class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                            <li>• Spring Boot 3.4.4</li>
+                            <li>• PostgreSQL + PostGIS</li>
+                            <li>• WebSocket</li>
+                            <li>• Goong Map API</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4" data-i18n="developer">Developer</h3>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 max-w-md">
+                    <div class="font-semibold text-gray-900 dark:text-white">Phạm Ngọc Phổ</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">23IT212</div>
+                    <div class="text-sm text-blue-600 dark:text-blue-400 mt-2" data-i18n="role">Fullstack Developer</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-300 mt-2">
+                        <span data-i18n="responsibilities">Development responsibilities include:</span>
+                        <ul class="list-disc ml-5 mt-1 text-xs" data-i18n="respList"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white dark:bg-gray-800 mt-8">
+        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500 dark:text-gray-400" data-i18n="copyright">
+                © 2024 RideConnect. All rights reserved.
+            </p>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

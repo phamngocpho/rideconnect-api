@@ -48,6 +48,9 @@ public class User {
     @Column(name = "status", length = 20)
     private String status;
 
+    @Column(name = "role", nullable = false)
+    private String role;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = ZonedDateTime.now();
@@ -60,5 +63,18 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = ZonedDateTime.now();
+    }
+    
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", fullName='" + fullName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }
