@@ -1,6 +1,7 @@
 package com.rideconnect.service;
 
 import com.rideconnect.dto.request.location.LocationUpdateRequest;
+import com.rideconnect.dto.request.location.NearbyDriversRequest; // Import DTO
 import com.rideconnect.dto.response.location.NearbyDriversResponse;
 
 public interface LocationService {
@@ -17,11 +18,8 @@ public interface LocationService {
      * Find nearby available drivers
      *
      * @param userId user ID
-     * @param latitude user's latitude
-     * @param longitude user's longitude
-     * @param radius search radius in meters
-     * @param vehicleType optional vehicle type filter
+     * @param request Nearby drivers request object
      * @return list of nearby drivers
      */
-    NearbyDriversResponse findNearbyDrivers(String userId, double latitude, double longitude, double radius, String vehicleType);
+    NearbyDriversResponse findNearbyDrivers(String userId, NearbyDriversRequest request); // Updated signature
 }

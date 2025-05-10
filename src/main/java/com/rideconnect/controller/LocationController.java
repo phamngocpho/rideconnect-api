@@ -1,6 +1,7 @@
 package com.rideconnect.controller;
 
 import com.rideconnect.dto.request.location.LocationUpdateRequest;
+import com.rideconnect.dto.request.location.NearbyDriversRequest;
 import com.rideconnect.dto.response.location.NearbyDriversResponse;
 import com.rideconnect.service.LocationService;
 import jakarta.validation.Valid;
@@ -29,12 +30,9 @@ public class LocationController {
     @GetMapping("/nearby-drivers")
     public ResponseEntity<NearbyDriversResponse> getNearbyDrivers(
             @AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam double latitude,
-            @RequestParam double longitude,
-            @RequestParam(defaultValue = "5000") double radius,
-            @RequestParam String vehicleType) {
+            @Valid @ModelAttribute NearbyDriversRequest request) { // Receive NearbyDriversRequest directly
         String userId = userDetails.getUsername();
-        NearbyDriversResponse response = locationService.findNearbyDrivers(userId, latitude, longitude, radius, vehicleType);
+        NearbyDriversResponse response = locationService.findNearbyDrivers(userId, request); // Pass the request object
         return ResponseEntity.ok(response);
     }
 }
