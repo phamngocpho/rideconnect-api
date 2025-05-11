@@ -3,12 +3,12 @@ package com.rideconnect.controller;
 import com.rideconnect.dto.request.location.LocationUpdateRequest;
 import com.rideconnect.dto.request.location.NearbyDriversRequest;
 import com.rideconnect.dto.response.location.NearbyDriversResponse;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.LocationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,21 +20,17 @@ public class LocationController {
 
     @PostMapping("/update")
     public ResponseEntity<Void> updateLocation(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody LocationUpdateRequest request) {
-        String userId = userDetails.getUsername();
-        locationService.updateLocation(userId, request);
+        locationService.updateLocation(userDetails, request);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/nearby-drivers")
+    @PostMapping("/nearby-drivers")
     public ResponseEntity<NearbyDriversResponse> getNearbyDrivers(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody NearbyDriversRequest request) {
-
-        String userId = userDetails.getUsername();
-
-        NearbyDriversResponse response = locationService.findNearbyDrivers(userId, request);
+        NearbyDriversResponse response = locationService.findNearbyDrivers(userDetails, request);
         return ResponseEntity.ok(response);
     }
 }

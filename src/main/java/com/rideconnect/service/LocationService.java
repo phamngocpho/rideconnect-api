@@ -1,25 +1,26 @@
 package com.rideconnect.service;
 
 import com.rideconnect.dto.request.location.LocationUpdateRequest;
-import com.rideconnect.dto.request.location.NearbyDriversRequest; // Import DTO
+import com.rideconnect.dto.request.location.NearbyDriversRequest;
 import com.rideconnect.dto.response.location.NearbyDriversResponse;
+import com.rideconnect.security.CustomUserDetails;
 
 public interface LocationService {
 
     /**
      * Update user's current location
      *
-     * @param userId user ID
+     * @param userDetails authenticated user details from security context
      * @param request location update details
      */
-    void updateLocation(String userId, LocationUpdateRequest request);
+    void updateLocation(CustomUserDetails userDetails, LocationUpdateRequest request);
 
     /**
      * Find nearby available drivers
      *
-     * @param userId user ID
+     * @param userDetails authenticated user details from security context
      * @param request Nearby drivers request object
      * @return list of nearby drivers
      */
-    NearbyDriversResponse findNearbyDrivers(String userId, NearbyDriversRequest request); // Updated signature
+    NearbyDriversResponse findNearbyDrivers(CustomUserDetails userDetails, NearbyDriversRequest request);
 }
