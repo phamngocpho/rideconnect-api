@@ -1,11 +1,13 @@
 package com.rideconnect.config;
 
+import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
-import org.postgis.PGgeometry;
+import org.postgis.PGgeography;
 import org.postgis.Point;
 
 import java.io.Serializable;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,8 +39,8 @@ public class PointType implements UserType<Point> {
     @Override
     public Point nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner)
             throws SQLException {
-        PGgeometry geom = (PGgeometry) rs.getObject(position);
-        return geom == null ? null : (Point) geom.getGeometry();
+        PGgeography geog = (PGgeography) rs.getObject(position);
+        return geog == null ? null : (Point) geog.getGeometry();
     }
 
     @Override
@@ -48,15 +50,17 @@ public class PointType implements UserType<Point> {
             st.setNull(index, java.sql.Types.OTHER);
         } else {
             value.setSrid(4326);
-            PGgeometry geom = new PGgeometry(value);
-            st.setObject(index, geom);
+            PGgeography geog = new PGgeography(value);
+            st.setObject(index, geog);
         }
     }
 
     @Override
     public Point deepCopy(Point value) {
         if (value == null) return null;
-        return new Point(value.x, value.y);
+        Point point = new Point(value.x, value.y);
+        point.setSrid(4326);
+        return point;
     }
 
     @Override
