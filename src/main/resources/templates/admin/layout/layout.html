@@ -3,20 +3,39 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
-<!-- Kiểm tra role ADMIN ngay đầu trang -->
 <th:block sec:authorize="!hasRole('ROLE_ADMIN')">
     <th:block th:replace="~{/403}"></th:block>
 </th:block>
 
-<!-- Nội dung chỉ hiển thị khi là ADMIN -->
 <th:block sec:authorize="hasRole('ROLE_ADMIN')">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Admin Dashboard</title>
+        <!-- Scripts -->
+        <script th:inline="javascript">
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark')
+            } else {
+                document.documentElement.classList.remove('dark')
+            }
+        </script>
         <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class'
+            }
+        </script>
+        <style>
+            html.dark {
+                background-color: rgb(17, 24, 39); /* dark:bg-gray-900 */
+            }
+            html {
+                background-color: rgb(249, 250, 251); /* bg-gray-50 */
+            }
+        </style>
     </head>
-    <body class="bg-gray-50">
+    <body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
     <!-- Import Sidebar -->
     <th:block th:replace="~{admin/components/sidebar :: sidebar}"></th:block>
 
@@ -30,11 +49,6 @@
             <!-- Nội dung từ các trang con sẽ được chèn vào đây -->
         </div>
     </main>
-
-    <!-- Scripts -->
-    <script th:inline="javascript">
-        // Thêm các scripts cần thiết
-    </script>
     </body>
 </th:block>
 </html>
