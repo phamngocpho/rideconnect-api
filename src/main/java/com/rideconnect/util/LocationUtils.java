@@ -8,13 +8,9 @@ public class LocationUtils {
 
     private static final int SRID = 4326; // WGS84
 
-    /**
-     * Creates a Point geometry from latitude and longitude
-     */
     public Point createPoint(double latitude, double longitude) {
-        // Tạo point với SRID 4326 (WGS84)
         Point point = new Point(longitude, latitude);
-        point.setSrid(4326);
+        point.setSrid(SRID);
         return point;
     }
 

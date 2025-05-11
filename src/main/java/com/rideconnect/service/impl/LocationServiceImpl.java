@@ -17,7 +17,6 @@ import com.rideconnect.util.LocationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.postgis.Point;
-import org.postgresql.util.PGobject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,10 +42,8 @@ public class LocationServiceImpl implements LocationService {
         User user = userRepository.findById(userDetails.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userDetails.getUserId().toString()));
 
-        // Create a location point
         Point location = locationUtils.createPoint(request.getLatitude(), request.getLongitude());
 
-        // Save to location history
         LocationHistory locationHistory = LocationHistory.builder()
                 .user(user)
                 .location(location)
@@ -55,7 +52,6 @@ public class LocationServiceImpl implements LocationService {
                 .build();
         locationHistoryRepository.save(locationHistory);
 
-        // If a user is a driver, update the current location
         driverRepository.findById(userDetails.getUserId()).ifPresent(driver -> {
             DriverLocation driverLocation = driverLocationRepository.findById(driver.getDriverId())
                     .orElse(new DriverLocation());
