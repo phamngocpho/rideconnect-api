@@ -5,47 +5,79 @@
 <aside th:fragment="sidebar" id="sidebar"
        class="fixed left-0 top-0 w-64 h-screen bg-white dark:bg-gray-800 shadow-lg transition-all duration-300 ease-in-out lg:translate-x-0">
     <div class="flex flex-col h-full">
-        <!-- Logo Section -->
-        <div class="p-4 bg-gradient-to-r from-blue-600 to-blue-700">
-            <div class="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                </svg>
-                <h1 class="text-xl font-bold text-white">Admin Panel</h1>
-            </div>
+        <!-- Logo/Brand -->
+        <div class="flex items-center justify-center h-16 border-b border-gray-200 dark:border-gray-700">
+            <h1 class="text-xl font-bold text-blue-600 dark:text-blue-400">Admin Dashboard</h1>
         </div>
 
         <!-- Admin Menu -->
-        <nav class="flex-1 overflow-y-auto py-4">
-            <div class="px-4 mb-4">
-                <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+        <nav class="flex-1 overflow-y-auto py-4 px-3">
+            <div class="space-y-2">
+                <p class="px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
                     Tổng quan
-                </div>
+                </p>
+
                 <a href="/admin"
-                   class="menu-item flex items-center px-4 py-2 mt-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                   class="menu-item group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
                     <span>Dashboard</span>
                 </a>
 
                 <a href="/admin/users"
-                   class="menu-item flex items-center px-4 py-2 mt-2 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                   class="menu-item group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                    </svg>
                     <span>Users</span>
+                </a>
+
+                <p class="mt-6 px-3 text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                    Quản lý
+                </p>
+
+                <a href="/admin/settings"
+                   class="menu-item group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Settings</span>
+                </a>
+
+                <a href="/admin/reports"
+                   class="menu-item group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm9 4a1 1 0 10-2 0v6a1 1 0 102 0V7zm-3 2a1 1 0 10-2 0v4a1 1 0 102 0V9zm-3 3a1 1 0 10-2 0v1a1 1 0 102 0v-1z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Reports</span>
                 </a>
             </div>
         </nav>
 
         <!-- Bottom Section -->
         <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200">
                 <div class="flex-shrink-0">
-                    <img class="h-10 w-10 rounded-full"
+                    <img class="h-10 w-10 rounded-full object-cover border-2 border-blue-500 dark:border-blue-400"
                          src="https://ui-avatars.com/api/?name=Admin&background=0D8ABC&color=fff"
                          alt="Admin">
                 </div>
-                <div class="flex-1">
-                    <div class="text-sm font-medium text-gray-900 dark:text-white" sec:authentication="name">Admin</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">Online</div>
+                <div class="flex-1 min-w-0">
+                    <div class="text-sm font-medium text-gray-900 dark:text-white truncate" sec:authentication="name">Admin</div>
+                    <div class="flex items-center">
+                        <span class="h-2 w-2 rounded-full bg-green-500 mr-1"></span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400">Online</span>
+                    </div>
+                </div>
+                <div class="flex-shrink-0">
+                    <form th:action="@{/logout}" method="post" class="inline">
+                        <button type="submit" class="p-1 rounded-full text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H3zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -62,7 +94,13 @@
         menuItems.forEach(item => {
             const url = item.getAttribute('href');
             if (currentPath.startsWith(url)) {
-                item.classList.add('bg-blue-50', 'text-blue-600', 'dark:bg-blue-900', 'dark:text-blue-300');
+                item.classList.add('bg-blue-50', 'text-blue-600', 'dark:bg-blue-900/30', 'dark:text-blue-400');
+                // Also highlight the icon
+                const icon = item.querySelector('svg');
+                if (icon) {
+                    icon.classList.remove('text-gray-500', 'dark:text-gray-400');
+                    icon.classList.add('text-blue-600', 'dark:text-blue-400');
+                }
             }
         });
     });
