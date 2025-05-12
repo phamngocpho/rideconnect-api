@@ -4,13 +4,13 @@ import com.rideconnect.dto.request.payment.CreatePaymentRequest;
 import com.rideconnect.dto.request.payment.SavePaymentMethodRequest;
 import com.rideconnect.dto.response.payment.PaymentDetailsResponse;
 import com.rideconnect.dto.response.payment.PaymentMethodsResponse;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,46 +24,40 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<PaymentDetailsResponse> createPayment(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody CreatePaymentRequest request) {
-        String userId = userDetails.getUsername();
-        PaymentDetailsResponse response = paymentService.createPayment(userId, request);
+        PaymentDetailsResponse response = paymentService.createPayment(userDetails, request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{paymentId}")
     public ResponseEntity<PaymentDetailsResponse> getPaymentDetails(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable UUID paymentId) {
-        String userId = userDetails.getUsername();
-        PaymentDetailsResponse response = paymentService.getPaymentDetails(userId, paymentId);
+        PaymentDetailsResponse response = paymentService.getPaymentDetails(userDetails, paymentId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/methods")
     public ResponseEntity<PaymentMethodsResponse> getPaymentMethods(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        PaymentMethodsResponse response = paymentService.getPaymentMethods(userId);
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        PaymentMethodsResponse response = paymentService.getPaymentMethods(userDetails);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/methods")
     public ResponseEntity<Void> savePaymentMethod(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody SavePaymentMethodRequest request) {
-        String userId = userDetails.getUsername();
-        paymentService.savePaymentMethod(userId, request);
+        paymentService.savePaymentMethod(userDetails, request);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/methods/{methodId}")
     public ResponseEntity<Void> deletePaymentMethod(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable UUID methodId) {
-        String userId = userDetails.getUsername();
-        paymentService.deletePaymentMethod(userId, methodId);
+        paymentService.deletePaymentMethod(userDetails, methodId);
         return ResponseEntity.ok().build();
     }
 }
-
