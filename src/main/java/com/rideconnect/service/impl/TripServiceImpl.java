@@ -78,8 +78,9 @@ public class TripServiceImpl implements TripService {
 
             // Get the nearest driver
             Object[] nearest = nearbyDrivers.getFirst();
-            DriverLocation driverLocation = (DriverLocation) nearest[0];
-            driver = driverLocation.getDriver();
+            UUID driverId = (UUID) nearest[0];
+            driver = driverRepository.findById(driverId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Driver", "id", driverId.toString()));
         }
 
         // Create a trip
