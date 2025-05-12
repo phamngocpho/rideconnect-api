@@ -105,7 +105,13 @@ public class LocationServiceImpl implements LocationService {
 
                 driverLocations.add(driverLocation);
             } catch (Exception e) {
-                log.error("Error processing driver location row: {}", e.getMessage());
+                log.error("Error processing driver location row: {}", e.getMessage(), e);
+                if (row != null) {
+                    for (int i = 0; i < row.length; i++) {
+                        log.error("Row[{}] = {} (type: {})", i, row[i],
+                                row[i] != null ? row[i].getClass().getName() : "null");
+                    }
+                }
             }
         }
 
