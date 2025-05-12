@@ -2,13 +2,13 @@ package com.rideconnect.controller;
 
 import com.rideconnect.dto.request.rating.CreateRatingRequest;
 import com.rideconnect.dto.response.rating.RatingResponse;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.RatingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,20 +22,18 @@ public class RatingController {
 
     @PostMapping("/trips/{tripId}")
     public ResponseEntity<RatingResponse> rateTrip(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable UUID tripId,
             @Valid @RequestBody CreateRatingRequest request) {
-        String userId = userDetails.getUsername();
-        RatingResponse response = ratingService.createRating(userId, tripId, request);
+        RatingResponse response = ratingService.createRating(userDetails, tripId, request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/trips/{tripId}")
     public ResponseEntity<RatingResponse> getTripRating(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable UUID tripId) {
-        String userId = userDetails.getUsername();
-        RatingResponse response = ratingService.getTripRating(userId, tripId);
+        RatingResponse response = ratingService.getTripRating(userDetails, tripId);
         return ResponseEntity.ok(response);
     }
 }

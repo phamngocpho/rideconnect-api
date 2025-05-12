@@ -8,6 +8,7 @@ import com.rideconnect.entity.*;
 import com.rideconnect.exception.BadRequestException;
 import com.rideconnect.exception.ResourceNotFoundException;
 import com.rideconnect.repository.*;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.TripService;
 import com.rideconnect.util.LocationUtils;
 import com.rideconnect.util.PriceCalculator;
@@ -39,12 +40,13 @@ public class TripServiceImpl implements TripService {
 
     @Override
     @Transactional
-    public TripDetailsResponse createTrip(String userId, CreateTripRequest request) {
-        User user = userRepository.findById(UUID.fromString(userId))
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+    public TripDetailsResponse createTrip(CustomUserDetails userDetails, CreateTripRequest request) {
+        UUID userId = userDetails.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId.toString()));
 
-        Customer customer = customerRepository.findById(UUID.fromString(userId))
-                .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", userId));
+        Customer customer = customerRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", userId.toString()));
 
         // Create location points
         Point pickupLocation = locationUtils.createPoint(request.getPickupLatitude(), request.getPickupLongitude());
@@ -132,14 +134,14 @@ public class TripServiceImpl implements TripService {
 
     @Override
     @Transactional(readOnly = true)
-    public TripDetailsResponse getTripDetails(String userId, UUID tripId) {
+    public TripDetailsResponse getTripDetails(CustomUserDetails userDetails, UUID tripId) {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
         // Check if the user is either customer or driver of this trip
-        UUID userUuid = UUID.fromString(userId);
-        if (!trip.getCustomer().getCustomerId().equals(userUuid) &&
-                !trip.getDriver().getDriverId().equals(userUuid)) {
+        UUID userId = userDetails.getUserId();
+        if (!trip.getCustomer().getCustomerId().equals(userId) &&
+                !trip.getDriver().getDriverId().equals(userId)) {
             throw new BadRequestException("You are not authorized to view this trip");
         }
 
@@ -148,14 +150,14 @@ public class TripServiceImpl implements TripService {
 
     @Override
     @Transactional
-    public TripDetailsResponse updateTripStatus(String userId, UUID tripId, UpdateTripStatusRequest request) {
+    public TripDetailsResponse updateTripStatus(CustomUserDetails userDetails, UUID tripId, UpdateTripStatusRequest request) {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
         // Check if the user is either customer or driver of this trip
-        UUID userUuid = UUID.fromString(userId);
-        boolean isDriver = trip.getDriver().getDriverId().equals(userUuid);
-        boolean isCustomer = trip.getCustomer().getCustomerId().equals(userUuid);
+        UUID userId = userDetails.getUserId();
+        boolean isDriver = trip.getDriver().getDriverId().equals(userId);
+        boolean isCustomer = trip.getCustomer().getCustomerId().equals(userId);
 
         if (!isDriver && !isCustomer) {
             throw new BadRequestException("You are not authorized to update this trip");
@@ -217,12 +219,9 @@ public class TripServiceImpl implements TripService {
 
     @Override
     @Transactional(readOnly = true)
-    public TripHistoryResponse getTripHistory(String userId) {
-        UUID userUuid = UUID.fromString(userId);
-        List<Trip> trips = tripRepository.findTripsByUserIdOrderByCreatedAtDesc(userUuid);
-
-        // Tạo bản sao final của userUuid để sử dụng trong lambda
-        final UUID finalUserUuid = userUuid;
+    public TripHistoryResponse getTripHistory(CustomUserDetails userDetails) {
+        UUID userId = userDetails.getUserId();
+        List<Trip> trips = tripRepository.findTripsByUserIdOrderByCreatedAtDesc(userId);
 
         List<TripHistoryResponse.TripSummary> tripSummaries = trips.stream()
                 .map(trip -> TripHistoryResponse.TripSummary.builder()
@@ -237,7 +236,7 @@ public class TripServiceImpl implements TripService {
                         // Sửa code lấy rating
                         .rating(trip.getRatings() != null ? trip.getRatings().stream()
                                 .filter(rating -> rating.getRater() != null &&
-                                        rating.getRater().getUserId().equals(finalUserUuid))
+                                        rating.getRater().getUserId().equals(userId))
                                 .map(Rating::getRatingValue)
                                 .findFirst()
                                 .orElse(null) : null)
@@ -339,4 +338,3 @@ public class TripServiceImpl implements TripService {
         }
     }
 }
-

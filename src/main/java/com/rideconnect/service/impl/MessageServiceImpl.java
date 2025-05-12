@@ -11,6 +11,7 @@ import com.rideconnect.exception.ResourceNotFoundException;
 import com.rideconnect.repository.MessageRepository;
 import com.rideconnect.repository.TripRepository;
 import com.rideconnect.repository.UserRepository;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.MessageService;
 import com.rideconnect.websocket.WebSocketHandler;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +33,15 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional
-    public MessageResponse sendMessage(String userId, SendMessageRequest request) {
+    public MessageResponse sendMessage(CustomUserDetails userDetails, SendMessageRequest request) {
+        UUID userId = userDetails.getUserId();
+
         Trip trip = tripRepository.findById(request.getTripId())
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", request.getTripId().toString()));
 
         // Check if the user is either customer or driver of this trip
-        UUID userUuid = UUID.fromString(userId);
-        boolean isDriver = trip.getDriver().getDriverId().equals(userUuid);
-        boolean isCustomer = trip.getCustomer().getCustomerId().equals(userUuid);
+        boolean isDriver = trip.getDriver().getDriverId().equals(userId);
+        boolean isCustomer = trip.getCustomer().getCustomerId().equals(userId);
 
         if (!isDriver && !isCustomer) {
             throw new BadRequestException("You are not authorized to send messages for this trip");
@@ -53,8 +55,8 @@ public class MessageServiceImpl implements MessageService {
         }
 
         // Get sender and recipient users
-        User sender = userRepository.findById(userUuid)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        User sender = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId.toString()));
 
         User recipient = userRepository.findById(recipientUuid)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", recipientUuid.toString()));
@@ -85,14 +87,15 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     @Transactional(readOnly = true)
-    public ConversationResponse getTripConversation(String userId, UUID tripId) {
+    public ConversationResponse getTripConversation(CustomUserDetails userDetails, UUID tripId) {
+        UUID userId = userDetails.getUserId();
+
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
         // Check if the user is either customer or driver of this trip
-        UUID userUuid = UUID.fromString(userId);
-        if (!trip.getCustomer().getCustomerId().equals(userUuid) &&
-                !trip.getDriver().getDriverId().equals(userUuid)) {
+        if (!trip.getCustomer().getCustomerId().equals(userId) &&
+                !trip.getDriver().getDriverId().equals(userId)) {
             throw new BadRequestException("You are not authorized to view messages for this trip");
         }
 
@@ -101,7 +104,7 @@ public class MessageServiceImpl implements MessageService {
 
         // Mark messages as read if the user is the recipient
         List<Message> unreadMessages = messages.stream()
-                .filter(message -> message.getRecipient().getUserId().equals(userUuid) && !message.getIsRead())
+                .filter(message -> message.getRecipient().getUserId().equals(userId) && !message.getIsRead())
                 .collect(Collectors.toList());
 
         if (!unreadMessages.isEmpty()) {
@@ -144,4 +147,3 @@ public class MessageServiceImpl implements MessageService {
                 .build();
     }
 }
-

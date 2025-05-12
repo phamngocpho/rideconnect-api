@@ -4,13 +4,13 @@ import com.rideconnect.dto.request.trip.CreateTripRequest;
 import com.rideconnect.dto.request.trip.UpdateTripStatusRequest;
 import com.rideconnect.dto.response.trip.TripDetailsResponse;
 import com.rideconnect.dto.response.trip.TripHistoryResponse;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.TripService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,37 +24,37 @@ public class TripController {
 
     @PostMapping
     public ResponseEntity<TripDetailsResponse> createTrip(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @Valid @RequestBody CreateTripRequest request) {
-        String userId = userDetails.getUsername();
-        TripDetailsResponse response = tripService.createTrip(userId, request);
+
+        TripDetailsResponse response = tripService.createTrip(userDetails, request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/{tripId}")
     public ResponseEntity<TripDetailsResponse> getTripDetails(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable UUID tripId) {
-        String userId = userDetails.getUsername();
-        TripDetailsResponse response = tripService.getTripDetails(userId, tripId);
+
+        TripDetailsResponse response = tripService.getTripDetails(userDetails, tripId);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{tripId}/status")
     public ResponseEntity<TripDetailsResponse> updateTripStatus(
-            @AuthenticationPrincipal UserDetails userDetails,
+            @AuthenticationPrincipal CustomUserDetails userDetails,
             @PathVariable UUID tripId,
             @Valid @RequestBody UpdateTripStatusRequest request) {
-        String userId = userDetails.getUsername();
-        TripDetailsResponse response = tripService.updateTripStatus(userId, tripId, request);
+
+        TripDetailsResponse response = tripService.updateTripStatus(userDetails, tripId, request);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/history")
     public ResponseEntity<TripHistoryResponse> getTripHistory(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        String userId = userDetails.getUsername();
-        TripHistoryResponse response = tripService.getTripHistory(userId);
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+
+        TripHistoryResponse response = tripService.getTripHistory(userDetails);
         return ResponseEntity.ok(response);
     }
 }

@@ -10,6 +10,7 @@ import com.rideconnect.exception.ResourceNotFoundException;
 import com.rideconnect.repository.TripRatingRepository;
 import com.rideconnect.repository.TripRepository;
 import com.rideconnect.repository.UserRepository;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,17 +28,17 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @Transactional
-    public RatingResponse createRating(String userId, UUID tripId, CreateRatingRequest request) {
+    public RatingResponse createRating(CustomUserDetails userDetails, UUID tripId, CreateRatingRequest request) {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
         // Check if a trip is completed
-        if (!(("completed").equals(trip.getStatus()))) {
+        if (!("completed").equals(trip.getStatus())) {
             throw new BadRequestException("Cannot rate a trip that is not completed");
         }
 
         // Check if the user is either customer or driver of this trip
-        UUID userUuid = UUID.fromString(userId);
+        UUID userUuid = userDetails.getUserId();
         boolean isDriver = trip.getDriver().getDriverId().equals(userUuid);
         boolean isCustomer = trip.getCustomer().getCustomerId().equals(userUuid);
 
@@ -52,7 +53,7 @@ public class RatingServiceImpl implements RatingService {
 
         // Get the user being rated
         User rater = userRepository.findById(userUuid)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userUuid.toString()));
 
         User rated;
         if (isDriver) {
@@ -82,12 +83,12 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     @Transactional(readOnly = true)
-    public RatingResponse getTripRating(String userId, UUID tripId) {
+    public RatingResponse getTripRating(CustomUserDetails userDetails, UUID tripId) {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", tripId.toString()));
 
         // Check if the user is either customer or driver of this trip
-        UUID userUuid = UUID.fromString(userId);
+        UUID userUuid = userDetails.getUserId();
         boolean isDriver = trip.getDriver().getDriverId().equals(userUuid);
         boolean isCustomer = trip.getCustomer().getCustomerId().equals(userUuid);
 
@@ -97,7 +98,8 @@ public class RatingServiceImpl implements RatingService {
 
         // Get a rating given by this user
         Rating rating = tripRatingRepository.findByTripTripIdAndRaterUserId(tripId, userUuid)
-                .orElseThrow(() -> new ResourceNotFoundException("Rating", "tripId and userId", tripId + " and " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("Rating", "tripId and userId",
+                        tripId + " and " + userUuid));
         return mapRatingToRatingResponse(rating);
     }
 
@@ -111,6 +113,5 @@ public class RatingServiceImpl implements RatingService {
                 .comment(rating.getComment())
                 .createdAt(rating.getCreatedAt())
                 .build();
-
     }
 }

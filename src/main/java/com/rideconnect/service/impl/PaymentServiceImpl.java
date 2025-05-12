@@ -14,6 +14,7 @@ import com.rideconnect.repository.PaymentMethodRepository;
 import com.rideconnect.repository.PaymentRepository;
 import com.rideconnect.repository.TripRepository;
 import com.rideconnect.repository.UserRepository;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,12 +36,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public PaymentDetailsResponse createPayment(String userId, CreatePaymentRequest request) {
+    public PaymentDetailsResponse createPayment(CustomUserDetails userDetails, CreatePaymentRequest request) {
+        UUID userId = userDetails.getUserId();
         Trip trip = tripRepository.findById(request.getTripId())
                 .orElseThrow(() -> new ResourceNotFoundException("Trip", "id", request.getTripId().toString()));
 
         // Check if the user is the customer of this trip
-        if (!trip.getCustomer().getCustomerId().equals(UUID.fromString(userId))) {
+        if (!trip.getCustomer().getCustomerId().equals(userId)) {
             throw new BadRequestException("You are not authorized to make payment for this trip");
         }
 
@@ -81,13 +83,14 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentDetailsResponse getPaymentDetails(String userId, UUID paymentId) {
+    public PaymentDetailsResponse getPaymentDetails(CustomUserDetails userDetails, UUID paymentId) {
+        UUID userId = userDetails.getUserId();
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment", "id", paymentId.toString()));
 
         // Check if the user is the customer of this trip
-        if (!payment.getTrip().getCustomer().getCustomerId().equals(UUID.fromString(userId)) &&
-                !payment.getTrip().getDriver().getDriverId().equals(UUID.fromString(userId))) {
+        if (!payment.getTrip().getCustomer().getCustomerId().equals(userId) &&
+                !payment.getTrip().getDriver().getDriverId().equals(userId)) {
             throw new BadRequestException("You are not authorized to view this payment");
         }
 
@@ -96,8 +99,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaymentMethodsResponse getPaymentMethods(String userId) {
-        List<PaymentMethod> paymentMethods = paymentMethodRepository.findByUserUserIdOrderByIsDefaultDesc(UUID.fromString(userId));
+    public PaymentMethodsResponse getPaymentMethods(CustomUserDetails userDetails) {
+        UUID userId = userDetails.getUserId();
+        List<PaymentMethod> paymentMethods = paymentMethodRepository.findByUserUserIdOrderByIsDefaultDesc(userId);
 
         List<PaymentMethodsResponse.PaymentMethodDto> paymentMethodDtos = paymentMethods.stream()
                 .map(this::mapPaymentMethodToDto)
@@ -117,9 +121,10 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public void savePaymentMethod(String userId, SavePaymentMethodRequest request) {
-        User user = userRepository.findById(UUID.fromString(userId))
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+    public void savePaymentMethod(CustomUserDetails userDetails, SavePaymentMethodRequest request) {
+        UUID userId = userDetails.getUserId();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId.toString()));
 
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .user(user)
@@ -141,12 +146,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @Transactional
-    public void deletePaymentMethod(String userId, UUID methodId) {
+    public void deletePaymentMethod(CustomUserDetails userDetails, UUID methodId) {
+        UUID userId = userDetails.getUserId();
         PaymentMethod paymentMethod = paymentMethodRepository.findById(methodId)
                 .orElseThrow(() -> new ResourceNotFoundException("Payment method", "id", methodId.toString()));
 
         // Check if the user is the owner of this payment method
-        if (!paymentMethod.getUser().getUserId().equals(UUID.fromString(userId))) {
+        if (!paymentMethod.getUser().getUserId().equals(userId)) {
             throw new BadRequestException("You are not authorized to delete this payment method");
         }
 

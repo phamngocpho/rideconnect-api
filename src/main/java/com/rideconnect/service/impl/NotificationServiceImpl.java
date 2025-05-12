@@ -4,6 +4,7 @@ import com.rideconnect.dto.response.notification.NotificationsResponse;
 import com.rideconnect.entity.Notification;
 import com.rideconnect.exception.ResourceNotFoundException;
 import com.rideconnect.repository.NotificationRepository;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional(readOnly = true)
-    public NotificationsResponse getNotifications(String userId) {
-        List<Notification> notifications = notificationRepository.findByUserUserIdOrderByCreatedAtDesc(UUID.fromString(userId));
+    public NotificationsResponse getNotifications(CustomUserDetails userDetails) {
+        UUID userId = userDetails.getUserId();
+        List<Notification> notifications = notificationRepository.findByUserUserIdOrderByCreatedAtDesc(userId);
 
         List<NotificationsResponse.NotificationDto> notificationDTOs = notifications.stream()
                 .map(this::mapNotificationToDto)
@@ -41,12 +43,13 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public void markNotificationAsRead(String userId, UUID notificationId) {
+    public void markNotificationAsRead(CustomUserDetails userDetails, UUID notificationId) {
+        UUID userId = userDetails.getUserId();
         Notification notification = notificationRepository.findById(notificationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Notification", "id", notificationId.toString()));
 
         // Check if notification belongs to user
-        if (!notification.getUser().getUserId().equals(UUID.fromString(userId))) {
+        if (!notification.getUser().getUserId().equals(userId)) {
             throw new ResourceNotFoundException("Notification", "id", notificationId.toString());
         }
 
@@ -57,8 +60,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public void markAllNotificationsAsRead(String userId) {
-        List<Notification> unreadNotifications = notificationRepository.findByUserUserIdAndIsReadFalse(UUID.fromString(userId));
+    public void markAllNotificationsAsRead(CustomUserDetails userDetails) {
+        UUID userId = userDetails.getUserId();
+        List<Notification> unreadNotifications = notificationRepository.findByUserUserIdAndIsReadFalse(userId);
 
         ZonedDateTime now = ZonedDateTime.now();
         unreadNotifications.forEach(notification -> {
