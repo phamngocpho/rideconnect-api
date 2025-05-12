@@ -1,11 +1,13 @@
 package com.rideconnect.entity;
 
+import com.rideconnect.config.PointType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.postgis.Point;
+import org.hibernate.annotations.Type;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -26,7 +28,8 @@ public class DriverLocation {
     @MapsId
     private Driver driver;
 
-    @Column(name = "current_location", columnDefinition = "geography(Point)")
+    @Type(PointType.class)
+    @Column(name = "current_location", columnDefinition = "geography(Point,4326)")
     private Point currentLocation;
 
     @Column(name = "last_updated")
