@@ -14,7 +14,7 @@ import com.rideconnect.util.LocationUtils;
 import com.rideconnect.util.PriceCalculator;
 import com.rideconnect.websocket.WebSocketHandler;
 import lombok.RequiredArgsConstructor;
-import org.postgis.Point;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,8 +78,9 @@ public class TripServiceImpl implements TripService {
 
             // Get the nearest driver
             Object[] nearest = nearbyDrivers.getFirst();
-            DriverLocation driverLocation = (DriverLocation) nearest[0];
-            driver = driverLocation.getDriver();
+            UUID driverId = (UUID) nearest[0];
+            driver = driverRepository.findById(driverId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Driver", "id", driverId.toString()));
         }
 
         // Create a trip

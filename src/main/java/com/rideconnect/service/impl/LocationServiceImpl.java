@@ -16,7 +16,7 @@ import com.rideconnect.service.LocationService;
 import com.rideconnect.util.LocationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.postgis.Point;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +42,12 @@ public class LocationServiceImpl implements LocationService {
         User user = userRepository.findById(userDetails.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", userDetails.getUserId().toString()));
 
+        // Thay đổi từ org.postgis.Point sang org.locationtech.jts.geom.Point
         Point location = locationUtils.createPoint(request.getLatitude(), request.getLongitude());
 
         LocationHistory locationHistory = LocationHistory.builder()
                 .user(user)
-                .location(location)
+                .location(location) // Sử dụng JTS Point
                 .heading(request.getHeading())
                 .speed(request.getSpeed())
                 .build();
@@ -57,7 +58,7 @@ public class LocationServiceImpl implements LocationService {
                     .orElse(new DriverLocation());
 
             driverLocation.setDriver(driver);
-            driverLocation.setCurrentLocation(location);
+            driverLocation.setCurrentLocation(location); // Sử dụng JTS Point
             driverLocation.setLastUpdated(ZonedDateTime.now());
 
             if (request.getIsAvailable() != null) {
