@@ -57,8 +57,8 @@ public class HomeController {
             return "redirect:/customer";
         }
         
-        // Nếu không có vai trò cụ thể, hiển thị trang dashboard chung
-        return "dashboard";
+        // Nếu không có vai trò cụ thể, hiển thị trang index
+        return "index";
     }
     
     @GetMapping("/403")
