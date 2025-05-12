@@ -12,26 +12,68 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Admin Dashboard</title>
-        <!-- Scripts -->
-        <script th:inline="javascript">
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark')
-            } else {
-                document.documentElement.classList.remove('dark')
-            }
+
+        <!-- Prevent Flash Of Incorrect Theme (FOIT) -->
+        <script>
+            (function() {
+                document.documentElement.style.visibility = 'hidden';
+            })();
         </script>
+
         <script src="https://cdn.tailwindcss.com"></script>
         <script>
             tailwind.config = {
                 darkMode: 'class'
             }
         </script>
+
+        <!-- Theme Management -->
+        <script>
+            // Theme Management
+            const themeManager = {
+                init() {
+                    // Áp dụng theme từ localStorage hoặc system preference
+                    if (localStorage.theme === 'dark' ||
+                        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    // Hiển thị nội dung sau khi đã áp dụng theme
+                    document.documentElement.style.visibility = 'visible';
+                },
+
+                toggle() {
+                    if (localStorage.theme === 'dark') {
+                        document.documentElement.classList.remove('dark');
+                        localStorage.theme = 'light';
+                    } else {
+                        document.documentElement.classList.add('dark');
+                        localStorage.theme = 'dark';
+                    }
+                }
+            };
+
+            // Initialize theme
+            themeManager.init();
+        </script>
+
         <style>
             html.dark {
                 background-color: rgb(17, 24, 39); /* dark:bg-gray-900 */
             }
             html {
                 background-color: rgb(249, 250, 251); /* bg-gray-50 */
+            }
+
+            /* Thêm transition mượt mà cho tất cả các phần tử */
+            *, *::before, *::after {
+                transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease;
+            }
+
+            /* Tối ưu hiệu suất bằng cách chỉ áp dụng transition cho các phần tử cần thiết */
+            .transition-theme {
+                transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease, box-shadow 0.3s ease;
             }
         </style>
     </head>

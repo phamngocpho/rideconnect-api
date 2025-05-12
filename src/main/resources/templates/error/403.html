@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" class="light">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,6 +41,20 @@
         });
     </script>
     <style>
+        html.dark {
+            background-color: #111827; /* dark:bg-gray-900 */
+        }
+
+        /* Ẩn nội dung cho đến khi JavaScript chạy xong */
+        .theme-pending {
+            visibility: hidden;
+        }
+
+        html:not(.theme-pending) .body-content {
+            visibility: visible;
+            transition: opacity 0.2s ease;
+        }
+
         .gradient-bg {
             background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
         }
@@ -62,8 +76,19 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300 font-sans">
-<div class="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+<script>
+    // Ngăn flash khi chuyển trang ở chế độ tối
+    (function() {
+        if (localStorage.theme === 'dark' ||
+            (!('theme' in localStorage) &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    })();
+</script>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-300 font-sans theme-pending">
+<script>document.body.classList.remove('theme-pending');</script>
+<div class="body-content min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
     <!-- Decorative elements -->
     <div class="absolute -top-24 -left-24 w-64 h-64 bg-blue-500 dark:bg-indigo-600 opacity-10 rounded-full blur-3xl"></div>
     <div class="absolute -bottom-32 -right-32 w-80 h-80 bg-purple-500 dark:bg-purple-700 opacity-10 rounded-full blur-3xl"></div>

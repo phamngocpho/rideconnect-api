@@ -8,25 +8,26 @@
 <body>
 <div layout:fragment="admin-content">
     <!-- Stats Cards -->
-    <div class="grid grid-cols-4 gap-6">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors duration-200">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-theme">
             <h3 class="text-gray-600 dark:text-gray-400">Tổng chuyến đi</h3>
             <p class="text-2xl font-bold text-gray-800 dark:text-white">1,245</p>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors duration-200">
-            <h3 class="text-gray-600 dark:text-gray-400">Chuyến hủy</h3>
-            <p class="text-2xl font-bold text-gray-800 dark:text-white">56</p>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-theme">
+            <h3 class="text-gray-600 dark:text-gray-400">Người dùng mới</h3>
+            <p class="text-2xl font-bold text-gray-800 dark:text-white">342</p>
         </div>
-        <!-- Thêm các thống kê khác -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-theme">
+            <h3 class="text-gray-600 dark:text-gray-400">Doanh thu tháng</h3>
+            <p class="text-2xl font-bold text-gray-800 dark:text-white">45.2M₫</p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-theme">
+            <h3 class="text-gray-600 dark:text-gray-400">Đánh giá trung bình</h3>
+            <p class="text-2xl font-bold text-gray-800 dark:text-white">4.8/5</p>
+        </div>
     </div>
 
-    <!-- Map View -->
-    <div class="mt-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow transition-colors duration-200">
-        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">God's View</h3>
-        <div id="map" class="h-[500px]">
-            <!-- Map content -->
-        </div>
-    </div>
+    <!-- Thêm nội dung dashboard khác ở đây -->
 </div>
 </body>
 </html>
