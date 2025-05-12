@@ -1,4 +1,4 @@
-package com.rideconnect.service;
+package com.rideconnect.service.impl;
 
 import com.rideconnect.entity.User;
 import com.rideconnect.repository.UserRepository;

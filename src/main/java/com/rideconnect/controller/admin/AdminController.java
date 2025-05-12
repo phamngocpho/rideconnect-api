@@ -1,4 +1,4 @@
-package com.rideconnect.controller;
+package com.rideconnect.controller.admin;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,17 +16,17 @@ public class AdminController {
         // Thêm dữ liệu vào model nếu cần
         return "admin/dashboard";
     }
-    
+
     @GetMapping("/users")
     public String users(Model model) {
         return "admin/users/index";
     }
-    
+
     @GetMapping("/reports")
     public String reports(Model model) {
         return "admin/reports";
     }
-    
+
     @GetMapping("/settings")
     public String settings(Model model) {
         return "admin/settings";
