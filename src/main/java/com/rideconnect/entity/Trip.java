@@ -6,8 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import org.postgis.LineString;
-import org.postgis.Point;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.Point;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
