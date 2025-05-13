@@ -17,7 +17,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "driver_locations")
 public class DriverLocation {
-
     @Id
     @Column(name = "driver_id")
     private UUID driverId;

@@ -14,5 +14,5 @@ import lombok.NoArgsConstructor;
 public class UpdateDriverStatusRequest {
 
     @NotNull(message = "Available status is required")
-    private Boolean isAvailable;
+    private String isAvailable;
 }
