@@ -4,39 +4,14 @@ import com.rideconnect.dto.request.driver.RegisterDriverRequest;
 import com.rideconnect.dto.request.driver.UpdateDriverStatusRequest;
 import com.rideconnect.dto.response.driver.DriverDashboardResponse;
 import com.rideconnect.dto.response.driver.DriverProfileResponse;
+import com.rideconnect.security.CustomUserDetails;
 
 public interface DriverService {
+    DriverProfileResponse registerAsDriver(CustomUserDetails userDetails, RegisterDriverRequest request);
 
-    /**
-     * Register as a driver
-     *
-     * @param userId user ID
-     * @param request driver registration details
-     * @return driver profile
-     */
-    DriverProfileResponse registerAsDriver(String userId, RegisterDriverRequest request);
+    DriverProfileResponse getDriverProfile(CustomUserDetails userDetails);
 
-    /**
-     * Get a driver profile
-     *
-     * @param userId user ID
-     * @return driver profile details
-     */
-    DriverProfileResponse getDriverProfile(String userId);
+    void updateDriverStatus(CustomUserDetails userDetails, UpdateDriverStatusRequest request);
 
-    /**
-     * Update driver status (available/unavailable)
-     *
-     * @param userId user ID
-     * @param request status update details
-     */
-    void updateDriverStatus(String userId, UpdateDriverStatusRequest request);
-
-    /**
-     * Get a driver dashboard with stats
-     *
-     * @param userId user ID
-     * @return dashboard data
-     */
-    DriverDashboardResponse getDriverDashboard(String userId);
+    DriverDashboardResponse getDriverDashboard(CustomUserDetails userDetails);
 }

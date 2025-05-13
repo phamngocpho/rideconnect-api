@@ -8,12 +8,14 @@ import com.rideconnect.entity.Driver;
 import com.rideconnect.exception.DriverNotFoundException;
 import com.rideconnect.repository.DriverRepository;
 import com.rideconnect.repository.UserRepository;
+import com.rideconnect.security.CustomUserDetails;
 import com.rideconnect.service.DriverService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,24 +28,30 @@ public class DriverServiceImpl implements DriverService {
     private final UserRepository userRepository;
 
     @Override
-    public DriverProfileResponse registerAsDriver(String userId, RegisterDriverRequest request) {
+    public DriverProfileResponse registerAsDriver(CustomUserDetails userDetails, RegisterDriverRequest request) {
+        UUID userId = userDetails.getUserId();
+        log.info("Registering user {} as driver", userId);
+
         // Triển khai sau
         return null;
     }
 
     @Override
-    public DriverProfileResponse getDriverProfile(String userId) {
+    public DriverProfileResponse getDriverProfile(CustomUserDetails userDetails) {
+        UUID userId = userDetails.getUserId();
+        log.info("Getting driver profile for user {}", userId);
+
         // Triển khai sau
         return null;
     }
 
     @Override
     @Transactional
-    public void updateDriverStatus(String userId, UpdateDriverStatusRequest request) {
-        log.info("Updating driver status for userId: {}, isAvailable: {}", userId, request.getIsAvailable());
+    public void updateDriverStatus(CustomUserDetails userDetails, UpdateDriverStatusRequest request) {
+        UUID userId = userDetails.getUserId();
+        log.info("Updating driver status for userId: {}, status: {}", userId, request.getIsAvailable());
 
-        UUID driverId = UUID.fromString(userId);
-        Optional<Driver> driverOptional = driverRepository.findByUserUserId(driverId);
+        Optional<Driver> driverOptional = driverRepository.findByUserUserId(userId);
 
         if (driverOptional.isEmpty()) {
             log.error("Driver not found with userId: {}", userId);
@@ -51,7 +59,12 @@ public class DriverServiceImpl implements DriverService {
         }
 
         Driver driver = driverOptional.get();
-        String newStatus = request.getIsAvailable() ? "online" : "offline";
+        String newStatus = request.getIsAvailable();
+
+        // Kiểm tra xem status có hợp lệ không
+        if (!Arrays.asList("online", "offline", "busy").contains(newStatus)) {
+            throw new IllegalArgumentException("Invalid status: " + newStatus);
+        }
 
         int updated = driverRepository.updateDriverStatus(driver.getDriverId(), newStatus);
 
@@ -64,7 +77,10 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public DriverDashboardResponse getDriverDashboard(String userId) {
+    public DriverDashboardResponse getDriverDashboard(CustomUserDetails userDetails) {
+        UUID userId = userDetails.getUserId();
+        log.info("Getting driver dashboard for user {}", userId);
+
         // Triển khai sau
         return null;
     }
