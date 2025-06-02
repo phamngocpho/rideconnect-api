@@ -3,6 +3,7 @@ package com.rideconnect.service;
 import com.rideconnect.dto.request.driver.DriverCreateRequest;
 import com.rideconnect.dto.request.driver.DriverUpdateRequest;
 import com.rideconnect.dto.response.driver.DriverResponse;
+import com.rideconnect.entity.Driver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DriverService {
+    Driver findById(UUID driverId);
     DriverResponse createDriver(UUID userId, DriverCreateRequest request);
     DriverResponse getDriverById(UUID driverId);
     Page<DriverResponse> getAllDrivers(Pageable pageable);

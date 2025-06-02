@@ -1,5 +1,8 @@
 package com.rideconnect.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.rideconnect.converter.UserStatusConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,18 +48,82 @@ public class User {
     @Column(name = "updated_at")
     private ZonedDateTime updatedAt;
 
+    @Convert(converter = UserStatusConverter.class)
     @Column(name = "status", length = 20)
-    private String status;
+    private UserStatus status;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private String role;
+    private UserRole role;
+
+    // Enum cho Status
+    public enum UserStatus {
+        @JsonValue
+        ACTIVE("active"),
+        INACTIVE("inactive"),
+        SUSPENDED("suspended");
+
+        private final String value;
+
+        UserStatus(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+        @JsonCreator
+        public static UserStatus fromValue(String value) {
+            for (UserStatus status : UserStatus.values()) {
+                if (status.value.equalsIgnoreCase(value)) {
+                    return status;
+                }
+            }
+            throw new IllegalArgumentException("Unknown status: " + value);
+        }
+    }
+
+    // Enum cho Role
+    public enum UserRole {
+        @JsonValue
+        ROLE_ADMIN("ROLE_ADMIN"),
+        ROLE_DRIVER("ROLE_DRIVER"),
+        ROLE_CUSTOMER("ROLE_CUSTOMER");
+
+        private final String value;
+
+        UserRole(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+        public String getRoleName() {
+            return this.value; // Đã có ROLE_ prefix
+        }
+
+        @JsonCreator
+        public static UserRole fromValue(String value) {
+            for (UserRole role : UserRole.values()) {
+                if (role.value.equals(value)) {
+                    return role;
+                }
+            }
+            throw new IllegalArgumentException("Unknown role: " + value);
+        }
+    }
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = ZonedDateTime.now();
         this.updatedAt = ZonedDateTime.now();
         if (this.status == null) {
-            this.status = "active";
+            this.status = UserStatus.ACTIVE;
         }
     }
 
@@ -64,7 +131,17 @@ public class User {
     protected void onUpdate() {
         this.updatedAt = ZonedDateTime.now();
     }
-    
+
+    // Getter cho password để Spring Security sử dụng
+    public String getPassword() {
+        return this.passwordHash;
+    }
+
+    // Setter cho password
+    public void setPassword(String password) {
+        this.passwordHash = password;
+    }
+
     @Override
     public String toString() {
         return "User{" +

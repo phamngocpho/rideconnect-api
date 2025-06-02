@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
 
         try {
             // Tạo user mới
-            String role = request.getRole();
+            User.UserRole role = User.UserRole.valueOf(request.getRole());
             log.info("Creating new user with role: {}", role);
 
             User user = User.builder()
@@ -75,7 +75,7 @@ public class AuthServiceImpl implements AuthService {
                     .email(request.getEmail())
                     .passwordHash(passwordEncoder.encode(request.getPassword()))
                     .role(role)
-                    .status("active")
+                    .status(User.UserStatus.ACTIVE)
                     .build();
 
             log.debug("Saving user to database: {}", user);

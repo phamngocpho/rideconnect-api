@@ -1,5 +1,6 @@
 package com.rideconnect.dto.request.user;
 
+import com.rideconnect.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -28,5 +29,5 @@ public class UserUpdateRequest {
 
     private String avatarUrl;
 
-    private String status;
+    private User.UserStatus status;
 }

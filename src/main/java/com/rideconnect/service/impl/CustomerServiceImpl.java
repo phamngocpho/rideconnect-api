@@ -28,6 +28,12 @@ public class CustomerServiceImpl implements CustomerService {
     private final UserService userService;
 
     @Override
+    public Customer findById(UUID customerId) {
+        return customerRepository.findById(customerId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy khách hàng với ID: " + customerId));
+    }
+
+    @Override
     @Transactional
     public CustomerResponse createCustomer(UUID userId, CustomerCreateRequest request) {
         User user = userRepository.findById(userId)

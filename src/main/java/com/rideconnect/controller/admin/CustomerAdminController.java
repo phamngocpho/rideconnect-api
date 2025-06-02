@@ -19,7 +19,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/admin/customers")
 @RequiredArgsConstructor
-public class AdminCustomerController {
+public class CustomerAdminController {
 
     private final CustomerService customerService;
 

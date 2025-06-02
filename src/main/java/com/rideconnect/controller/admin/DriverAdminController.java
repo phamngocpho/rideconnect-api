@@ -21,7 +21,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/admin/drivers")
 @RequiredArgsConstructor
-public class AdminDriverController {
+public class DriverAdminController {
 
     private final DriverService driverService;
 

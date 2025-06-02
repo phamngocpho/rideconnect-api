@@ -1,5 +1,7 @@
 package com.rideconnect.dto.response.user;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.rideconnect.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +22,8 @@ public class UserResponse {
     private String avatarUrl;
     private ZonedDateTime createdAt;
     private ZonedDateTime updatedAt;
-    private String status;
-    private String role;
+    @JsonValue
+    private User.UserStatus status;
+    private User.UserRole role;
 }
 

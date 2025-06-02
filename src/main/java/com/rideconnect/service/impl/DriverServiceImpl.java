@@ -31,6 +31,12 @@ public class DriverServiceImpl implements DriverService {
     private final UserService userService;
 
     @Override
+    public Driver findById(UUID driverId) {
+        return driverRepository.findById(driverId)
+                .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy tài xế với ID: " + driverId));
+    }
+
+    @Override
     @Transactional
     public DriverResponse createDriver(UUID userId, DriverCreateRequest request) {
         User user = userRepository.findById(userId)

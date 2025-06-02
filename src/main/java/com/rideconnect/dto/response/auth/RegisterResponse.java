@@ -1,5 +1,6 @@
 package com.rideconnect.dto.response.auth;
 
+import com.rideconnect.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ public class RegisterResponse {
     private String fullName;
     private String phoneNumber;
     private String email;
-    private String role;
+    private User.UserRole role;
     private String message;
     private boolean success;
 }

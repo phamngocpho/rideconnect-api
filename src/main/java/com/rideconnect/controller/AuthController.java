@@ -37,7 +37,7 @@ public class AuthController {
     public String showRegistrationForm(Model model) {
         log.info("Showing registration form");
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setRole("ROLE_CUSTOMER"); // Set default selected role in the form
+        registerRequest.setRole("ROLE_CUSTOMER"); // Set the default selected the role in the form
         model.addAttribute("registerRequest", registerRequest);
         return "auth/register";
     }

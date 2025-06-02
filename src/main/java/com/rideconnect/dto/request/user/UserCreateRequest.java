@@ -1,5 +1,6 @@
 package com.rideconnect.dto.request.user;
 
+import com.rideconnect.entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -33,5 +34,5 @@ public class UserCreateRequest {
     private String avatarUrl;
 
     @NotBlank(message = "Vai trò không được để trống")
-    private String role;
+    private User.UserRole role;
 }
