@@ -229,7 +229,6 @@ ws://your-domain/ws
     - Technical stack information
     - Developer information
     - Supports both English and Vietnamese languages
-    - Dark/Light theme toggle
 
 ## 🔍 Monitoring
 
