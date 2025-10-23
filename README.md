@@ -2,7 +2,7 @@
 
 RideConnect API is a Spring Boot-based backend service that provides REST endpoints for a ride-hailing application with Goong Maps integration. The system supports real-time tracking, payment processing, and trip management.
 
-## 📋 Overview
+## Overview
 
 - **Framework:** Spring Boot 3.4.4
 - **Java Version:** JDK 21
@@ -11,14 +11,14 @@ RideConnect API is a Spring Boot-based backend service that provides REST endpoi
 - **Documentation:** Swagger UI
 - **Real-time Communication:** WebSocket
 
-## 🔧 System Requirements
+## System Requirements
 
 - Java JDK 21
 - Maven 3.8.x or higher
 - PostgreSQL 13+ with PostGIS extension
 - Docker (optional)
 
-## 🏗 Tech Stack
+## Tech Stack
 
 ### Core Dependencies
 - Spring Boot 3.4.4
@@ -44,7 +44,7 @@ RideConnect API is a Spring Boot-based backend service that provides REST endpoi
 - Thymeleaf
 - WebFlux
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 com.rideconnect
@@ -67,7 +67,7 @@ com.rideconnect
 └── util/             # Utility classes
 ```
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### 1. PostgreSQL and PostGIS Setup
 
@@ -146,7 +146,7 @@ mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=dev"
 docker build -t rideconnect-api .
 docker run -p 8080:8080 --env-file .env rideconnect-api
 ```
-## 🔧 Application Profiles
+## Application Profiles
 
 The application supports different profiles for various environments:
 
@@ -164,7 +164,7 @@ To run with a specific profile, use one of the commands below:
 java -jar target/RideConnectApplication-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev
 ```
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### Authentication
 | Method | Endpoint | Description |
@@ -194,14 +194,13 @@ java -jar target/RideConnectApplication-0.0.1-SNAPSHOT.jar --spring.profiles.act
 | GET | `/api/payments/{paymentId}` | Get payment details |
 | GET | `/api/payments/methods` | List payment methods |
 
-### Messages & Notifications
+### Notifications
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/messages` | Send message |
 | GET | `/api/notifications` | Get notifications |
 | PUT | `/api/notifications/{id}/read` | Mark as read |
 
-## 🔒 Security
+## Security
 
 - JWT Authentication
 - CORS configured for specified origins
@@ -209,20 +208,15 @@ java -jar target/RideConnectApplication-0.0.1-SNAPSHOT.jar --spring.profiles.act
 - BCrypt password encoding
 - Stateless session management
 
-## 📱 WebSocket
+## WebSocket
 
 WebSocket endpoints for real-time features:
 ```
 ws://your-domain/ws
-/topic/location-updates
-/topic/notifications
-/topic/chat
 ```
 
-## 📖 Documentation
+## Documentation
 
-- Swagger UI: `http://localhost:8080/swagger-ui.html`
-- API Docs: `http://localhost:8080/v3/api-docs`
 - Project Info: `http://localhost:8080/api/project`
   - Provides a responsive web interface with:
     - Project overview and features
@@ -230,11 +224,7 @@ ws://your-domain/ws
     - Developer information
     - Supports both English and Vietnamese languages
 
-## 🔍 Monitoring
-
-Health check endpoint: `http://localhost:8080/actuator/health`
-
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/AmazingFeature`)
@@ -242,10 +232,10 @@ Health check endpoint: `http://localhost:8080/actuator/health`
 4. Push to branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
 
-## 📧 Contact
+## Contact
 
 For questions or issues, please create an issue in the repository or contact us directly.
